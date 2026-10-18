@@ -1,3 +1,2 @@
 # Google AdSense ads.txt for currenflow.com
-# Replace pub-XXXXXXXXXXXXXXXX with your actual AdSense Publisher ID once approved
 google.com, pub-3890743631653804, DIRECT, f08c47fec0942fa0
