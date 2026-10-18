@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { ConverterCard } from './components/ConverterCard';
+import { AffiliateBanner } from './components/AffiliateBanner';
 import { ConversionTable } from './components/ConversionTable';
 import { CurrencyMatrix } from './components/CurrencyMatrix';
 import { SeoContent } from './components/SeoContent';
 import { FaqSection } from './components/FaqSection';
 import { AdPlaceholder } from './components/AdPlaceholder';
 import { EmbedModal } from './components/EmbedModal';
+import { LegalModal, type LegalTab } from './components/LegalModal';
 import { Footer } from './components/Footer';
 import type { RatesData } from './types/currency';
 import { fetchExchangeRates, convertCurrency } from './services/currencyService';
@@ -21,6 +23,8 @@ export function App() {
   const [toCurrency, setToCurrency] = useState<string>('EUR');
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
   const [isEmbedMode, setIsEmbedMode] = useState(false);
+  const [isLegalOpen, setIsLegalOpen] = useState(false);
+  const [activeLegalTab, setActiveLegalTab] = useState<LegalTab>('privacy');
 
   // Check URL query parameters for initial state or embed mode
   useEffect(() => {
@@ -125,7 +129,7 @@ export function App() {
         <AdPlaceholder format="leaderboard" />
 
         {/* Core Converter Card (Step #3 in user image) */}
-        <div className="mb-12">
+        <div>
           <ConverterCard
             ratesData={ratesData}
             isLoading={isLoading}
@@ -138,6 +142,13 @@ export function App() {
             setAmount={setAmount}
           />
         </div>
+
+        {/* High-Converting Remittance / FinTech Affiliate Card */}
+        <AffiliateBanner
+          fromCurrency={fromCurrency}
+          toCurrency={toCurrency}
+          amount={amount}
+        />
 
         {/* Quick Conversion Matrix & Breakdown Tables */}
         <div className="space-y-10 mb-12">
@@ -185,11 +196,23 @@ export function App() {
         toCurrency={toCurrency}
       />
 
+      {/* Legal & Compliance Modal (AdSense Ready) */}
+      <LegalModal
+        isOpen={isLegalOpen}
+        activeTab={activeLegalTab}
+        onClose={() => setIsLegalOpen(false)}
+        onSelectTab={setActiveLegalTab}
+      />
+
       {/* Global Footer */}
       <Footer
         onSelectPair={(from, to) => {
           setFromCurrency(from);
           setToCurrency(to);
+        }}
+        onOpenLegal={(tab) => {
+          setActiveLegalTab(tab);
+          setIsLegalOpen(true);
         }}
       />
     </div>

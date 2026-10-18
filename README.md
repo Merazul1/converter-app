@@ -1,6 +1,7 @@
 # 🚀 CurrenFlow - Live Currency Converter & Exchange Tool
 
-🌐 **Live Application URL:** [https://currenflow.vercel.app/](https://currenflow.vercel.app/)
+🌐 **Production Domain:** [https://currenflow.com](https://currenflow.com)  
+*(Backup / Vercel Subdomain: [https://currenflow.vercel.app](https://currenflow.vercel.app))*
 
 A high-speed, SEO-optimized, production-ready Currency Converter web application built according to the **"Roadmap to Your First $1,000..."** programmatic tool website blueprint.
 

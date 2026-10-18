@@ -10,7 +10,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEmbed }) => {
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80 transition-all">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Brand Logo */}
-        <a href="https://currenflow.vercel.app/" className="flex items-center gap-2.5 group cursor-pointer" title="CurrenFlow - Live Currency Converter">
+        <a href="https://currenflow.com/" className="flex items-center gap-2.5 group cursor-pointer" title="CurrenFlow - Live Currency Converter">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
             <Coins size={22} />
           </div>

@@ -20,8 +20,8 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
 
   const currentOrigin = typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null'
     ? window.location.origin
-    : 'https://currenflow.vercel.app';
-  const embedCode = `<iframe \n  src="${currentOrigin}?embed=true&from=${fromCurrency}&to=${toCurrency}" \n  width="100%" \n  height="480" \n  frameborder="0" \n  title="CurrenFlow Currency Converter" \n  style="border-radius: 16px; border: 1px solid #e2e8f0; max-width: 580px;"\n></iframe>`;
+    : 'https://currenflow.com';
+  const embedCode = `<iframe \n  src="${currentOrigin}?embed=true&from=${fromCurrency}&to=${toCurrency}" \n  width="100%" \n  height="480" \n  frameborder="0" \n  title="CurrenFlow Currency Converter" \n  style="border-radius: 16px; border: 1px solid #e2e8f0; max-width: 580px;"\n></iframe>\n<div style="font-size: 11px; text-align: right; max-width: 580px; margin-top: 4px; color: #64748b;">\n  Powered by <a href="https://currenflow.com" target="_blank" rel="noopener" style="color: #2563eb; text-decoration: underline;">CurrenFlow</a>\n</div>`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(embedCode);
