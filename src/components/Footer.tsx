@@ -13,14 +13,14 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair }) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
           {/* Brand Info */}
           <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+            <a href="https://currenflow.vercel.app/" className="flex items-center gap-2 mb-4 group cursor-pointer inline-flex" title="CurrenFlow">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
                 <Coins size={18} />
               </div>
-              <span className="text-xl font-bold text-white tracking-tight">
+              <span className="text-xl font-bold text-white tracking-tight group-hover:text-blue-400 transition-colors">
                 Curren<span className="text-blue-400">Flow</span>
               </span>
-            </div>
+            </a>
             <p className="text-xs text-slate-400 leading-relaxed mb-4">
               Fast, free, and accurate currency converter with real-time mid-market exchange rates for global commerce, travel, and financial planning.
             </p>

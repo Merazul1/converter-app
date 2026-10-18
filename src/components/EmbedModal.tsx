@@ -18,7 +18,9 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
 
   if (!isOpen) return null;
 
-  const currentOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://currenflow.com';
+  const currentOrigin = typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null'
+    ? window.location.origin
+    : 'https://currenflow.vercel.app';
   const embedCode = `<iframe \n  src="${currentOrigin}?embed=true&from=${fromCurrency}&to=${toCurrency}" \n  width="100%" \n  height="480" \n  frameborder="0" \n  title="CurrenFlow Currency Converter" \n  style="border-radius: 16px; border: 1px solid #e2e8f0; max-width: 580px;"\n></iframe>`;
 
   const handleCopy = () => {
