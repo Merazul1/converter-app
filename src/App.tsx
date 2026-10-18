@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Navbar } from './components/Navbar';
 import { ConverterCard } from './components/ConverterCard';
 import { AffiliateBanner } from './components/AffiliateBanner';
@@ -12,7 +12,7 @@ import { LegalModal, type LegalTab } from './components/LegalModal';
 import { Footer } from './components/Footer';
 import type { RatesData } from './types/currency';
 import { fetchExchangeRates, convertCurrency } from './services/currencyService';
-import { POPULAR_PAIRS } from './data/currencies';
+import { CURRENCIES, POPULAR_PAIRS } from './data/currencies';
 import { TrendingUp, ShieldCheck } from 'lucide-react';
 
 export function App() {
@@ -26,21 +26,85 @@ export function App() {
   const [isLegalOpen, setIsLegalOpen] = useState(false);
   const [activeLegalTab, setActiveLegalTab] = useState<LegalTab>('privacy');
 
-  // Check URL query parameters for initial state or embed mode
-  useEffect(() => {
+  // Change pair and update URL without full page reload
+  const updatePair = useCallback((from: string, to: string) => {
+    setFromCurrency(from);
+    setToCurrency(to);
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const urlFrom = params.get('from');
-      const urlTo = params.get('to');
-      const urlAmount = params.get('amount');
-      const urlEmbed = params.get('embed');
-
-      if (urlFrom) setFromCurrency(urlFrom.toUpperCase());
-      if (urlTo) setToCurrency(urlTo.toUpperCase());
-      if (urlAmount && !isNaN(parseFloat(urlAmount))) setAmount(parseFloat(urlAmount));
-      if (urlEmbed === 'true') setIsEmbedMode(true);
+      const newPath = `/${from.toLowerCase()}-to-${to.toLowerCase()}`;
+      if (window.location.pathname !== newPath) {
+        window.history.pushState({ from, to }, '', newPath);
+      }
     }
   }, []);
+
+  // Parse path or query params on initial load
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const parseLocation = () => {
+        // 1. Check pathname: e.g. /usd-to-eur or /convert/usd-to-eur
+        const pathMatch = window.location.pathname.match(/\/([a-z]{3})-to-([a-z]{3})/i);
+        if (pathMatch) {
+          const from = pathMatch[1].toUpperCase();
+          const to = pathMatch[2].toUpperCase();
+          if (CURRENCIES.some((c) => c.code === from) && CURRENCIES.some((c) => c.code === to)) {
+            setFromCurrency(from);
+            setToCurrency(to);
+            return;
+          }
+        }
+
+        // 2. Fallback to query params: ?from=USD&to=EUR
+        const params = new URLSearchParams(window.location.search);
+        const urlFrom = params.get('from');
+        const urlTo = params.get('to');
+        const urlAmount = params.get('amount');
+        const urlEmbed = params.get('embed');
+
+        if (urlFrom) setFromCurrency(urlFrom.toUpperCase());
+        if (urlTo) setToCurrency(urlTo.toUpperCase());
+        if (urlAmount && !isNaN(parseFloat(urlAmount))) setAmount(parseFloat(urlAmount));
+        if (urlEmbed === 'true') setIsEmbedMode(true);
+      };
+
+      parseLocation();
+
+      const handlePopState = () => parseLocation();
+      window.addEventListener('popstate', handlePopState);
+      return () => window.removeEventListener('popstate', handlePopState);
+    }
+  }, []);
+
+  // Dynamic SEO Title, Description, and Canonical updates
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
+      const toObj = CURRENCIES.find((c) => c.code === toCurrency);
+      const fromName = fromObj?.name || fromCurrency;
+      const toName = toObj?.name || toCurrency;
+
+      // Update Document Title for search engines
+      document.title = `${fromCurrency} to ${toCurrency} - Convert ${fromName} to ${toName} | CurrenFlow`;
+
+      // Update Meta Description
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute(
+          'content',
+          `Convert ${fromCurrency} to ${toCurrency} (${fromName} to ${toName}) at real-time mid-market exchange rates. 100% free live calculator with zero hidden fees, comparison charts, and breakdown tables.`
+        );
+      }
+
+      // Update Canonical Link
+      const canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) {
+        canonical.setAttribute(
+          'href',
+          `https://www.currenflow.com/${fromCurrency.toLowerCase()}-to-${toCurrency.toLowerCase()}`
+        );
+      }
+    }
+  }, [fromCurrency, toCurrency]);
 
   const loadRates = async () => {
     setIsLoading(true);
@@ -82,6 +146,9 @@ export function App() {
     );
   }
 
+  const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
+  const toObj = CURRENCIES.find((c) => c.code === toCurrency);
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       {/* Top Navbar */}
@@ -99,7 +166,9 @@ export function App() {
             <span className="text-amber-500">{toCurrency}</span> at Live Market Rates
           </h1>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            Accurate, real-time mid-market currency exchange rates. Zero hidden banking fees, updated automatically every few minutes.
+            Accurate, real-time mid-market currency exchange rates for{' '}
+            <strong className="text-slate-900">{fromObj?.name || fromCurrency}</strong> to{' '}
+            <strong className="text-slate-900">{toObj?.name || toCurrency}</strong>. Zero hidden banking fees, updated automatically every few minutes.
           </p>
 
           {/* Quick Popular Pair Shortcuts */}
@@ -109,10 +178,7 @@ export function App() {
               <button
                 key={`${pair.from}-${pair.to}`}
                 type="button"
-                onClick={() => {
-                  setFromCurrency(pair.from);
-                  setToCurrency(pair.to);
-                }}
+                onClick={() => updatePair(pair.from, pair.to)}
                 className={`text-xs px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
                   fromCurrency === pair.from && toCurrency === pair.to
                     ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
@@ -136,8 +202,8 @@ export function App() {
             onRefresh={loadRates}
             fromCurrency={fromCurrency}
             toCurrency={toCurrency}
-            setFromCurrency={setFromCurrency}
-            setToCurrency={setToCurrency}
+            setFromCurrency={(from) => updatePair(from, toCurrency)}
+            setToCurrency={(to) => updatePair(fromCurrency, to)}
             amount={amount}
             setAmount={setAmount}
           />
@@ -162,7 +228,7 @@ export function App() {
           <CurrencyMatrix
             baseCurrency={fromCurrency}
             rates={rates}
-            onSelectTarget={(target) => setToCurrency(target)}
+            onSelectTarget={(target) => updatePair(fromCurrency, target)}
           />
         </div>
 
@@ -206,10 +272,7 @@ export function App() {
 
       {/* Global Footer */}
       <Footer
-        onSelectPair={(from, to) => {
-          setFromCurrency(from);
-          setToCurrency(to);
-        }}
+        onSelectPair={(from, to) => updatePair(from, to)}
         onOpenLegal={(tab) => {
           setActiveLegalTab(tab);
           setIsLegalOpen(true);

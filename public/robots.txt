@@ -1,0 +1,7 @@
+# Robots.txt for https://www.currenflow.com/
+User-agent: *
+Allow: /
+
+# Host & Sitemap
+Host: https://www.currenflow.com
+Sitemap: https://www.currenflow.com/sitemap.xml
