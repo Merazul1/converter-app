@@ -9,6 +9,7 @@ import { FaqSection } from './components/FaqSection';
 import { AdPlaceholder } from './components/AdPlaceholder';
 import { EmbedModal } from './components/EmbedModal';
 import { LegalModal, type LegalTab } from './components/LegalModal';
+import { LegalPage } from './components/LegalPage';
 import { Footer } from './components/Footer';
 import type { RatesData } from './types/currency';
 import { fetchExchangeRates, convertCurrency } from './services/currencyService';
@@ -25,9 +26,11 @@ export function App() {
   const [isEmbedMode, setIsEmbedMode] = useState(false);
   const [isLegalOpen, setIsLegalOpen] = useState(false);
   const [activeLegalTab, setActiveLegalTab] = useState<LegalTab>('privacy');
+  const [pageView, setPageView] = useState<'home' | 'privacy' | 'terms' | 'contact'>('home');
 
   // Change pair and update URL without full page reload
   const updatePair = useCallback((from: string, to: string) => {
+    setPageView('home');
     setFromCurrency(from);
     setToCurrency(to);
     if (typeof window !== 'undefined') {
@@ -42,8 +45,26 @@ export function App() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const parseLocation = () => {
-        // 1. Check pathname: e.g. /usd-to-eur or /convert/usd-to-eur
-        const pathMatch = window.location.pathname.match(/\/([a-z]{3})-to-([a-z]{3})/i);
+        const path = window.location.pathname.toLowerCase().replace(/\/$/, '');
+
+        // 1. Check legal paths: /privacy-policy, /terms-of-service, /contact
+        if (path === '/privacy-policy') {
+          setPageView('privacy');
+          return;
+        }
+        if (path === '/terms-of-service') {
+          setPageView('terms');
+          return;
+        }
+        if (path === '/contact') {
+          setPageView('contact');
+          return;
+        }
+
+        setPageView('home');
+
+        // 2. Check currency pair pathname: e.g. /usd-to-eur or /convert/usd-to-eur
+        const pathMatch = path.match(/\/([a-z]{3})-to-([a-z]{3})/i);
         if (pathMatch) {
           const from = pathMatch[1].toUpperCase();
           const to = pathMatch[2].toUpperCase();
@@ -54,7 +75,7 @@ export function App() {
           }
         }
 
-        // 2. Fallback to query params: ?from=USD&to=EUR
+        // 3. Fallback to query params: ?from=USD&to=EUR
         const params = new URLSearchParams(window.location.search);
         const urlFrom = params.get('from');
         const urlTo = params.get('to');
@@ -75,9 +96,9 @@ export function App() {
     }
   }, []);
 
-  // Dynamic SEO Title, Description, and Canonical updates
+  // Dynamic SEO Title, Description, and Canonical updates (for home and currency pairs)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && pageView === 'home') {
       const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
       const toObj = CURRENCIES.find((c) => c.code === toCurrency);
       const fromName = fromObj?.name || fromCurrency;
@@ -104,7 +125,7 @@ export function App() {
         );
       }
     }
-  }, [fromCurrency, toCurrency]);
+  }, [fromCurrency, toCurrency, pageView]);
 
   const loadRates = async () => {
     setIsLoading(true);
@@ -124,6 +145,21 @@ export function App() {
 
   const rates = ratesData?.rates || {};
   const { rate, inverseRate } = convertCurrency(1, fromCurrency, toCurrency, rates);
+
+  // If on a dedicated legal page route (/privacy-policy, /terms-of-service, /contact)
+  if (pageView !== 'home') {
+    return (
+      <LegalPage
+        type={pageView}
+        onBackToHome={() => {
+          setPageView('home');
+          if (typeof window !== 'undefined') {
+            window.history.pushState(null, '', '/');
+          }
+        }}
+      />
+    );
+  }
 
   // If in embed mode, only render the converter card neatly
   if (isEmbedMode) {
@@ -148,6 +184,15 @@ export function App() {
 
   const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
   const toObj = CURRENCIES.find((c) => c.code === toCurrency);
+
+  const handleOpenLegal = (tab: LegalTab) => {
+    setPageView(tab);
+    if (typeof window !== 'undefined') {
+      const path = tab === 'privacy' ? '/privacy-policy' : tab === 'terms' ? '/terms-of-service' : '/contact';
+      window.history.pushState(null, '', path);
+      window.scrollTo(0, 0);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
@@ -262,7 +307,7 @@ export function App() {
         toCurrency={toCurrency}
       />
 
-      {/* Legal & Compliance Modal (AdSense Ready) */}
+      {/* Legal & Compliance Modal (Quick Popup) */}
       <LegalModal
         isOpen={isLegalOpen}
         activeTab={activeLegalTab}
@@ -273,10 +318,7 @@ export function App() {
       {/* Global Footer */}
       <Footer
         onSelectPair={(from, to) => updatePair(from, to)}
-        onOpenLegal={(tab) => {
-          setActiveLegalTab(tab);
-          setIsLegalOpen(true);
-        }}
+        onOpenLegal={handleOpenLegal}
       />
     </div>
   );
