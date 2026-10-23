@@ -104,15 +104,20 @@ export function App() {
       const fromName = fromObj?.name || fromCurrency;
       const toName = toObj?.name || toCurrency;
 
-      // Update Document Title for search engines
-      document.title = `${fromCurrency} to ${toCurrency} - Convert ${fromName} to ${toName} | CurrenFlow`;
+      // Update Document Title for search engines (CTR-optimized)
+      const isDefaultHome = fromCurrency === 'USD' && toCurrency === 'EUR' && window.location.pathname === '/';
+      if (isDefaultHome) {
+        document.title = 'CurrenFlow: Live Currency Converter & Exchange Rates Calculator (Today)';
+      } else {
+        document.title = `${fromCurrency} to ${toCurrency}: Live ${fromName} to ${toName} Rate (Today) | CurrenFlow`;
+      }
 
       // Update Meta Description
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
         metaDesc.setAttribute(
           'content',
-          `Convert ${fromCurrency} to ${toCurrency} (${fromName} to ${toName}) at real-time mid-market exchange rates. 100% free live calculator with zero hidden fees, comparison charts, and breakdown tables.`
+          `Convert ${fromCurrency} to ${toCurrency} (${fromName} to ${toName}) at live mid-market exchange rate today. Real-time calculator with zero hidden bank fees, comparison charts, and breakdown tables.`
         );
       }
 

@@ -20,10 +20,10 @@ export const ConversionTable: React.FC<ConversionTableProps> = ({
     <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200/80">
       <div className="mb-6">
         <h3 className="text-xl font-bold text-slate-900">
-          Conversion Breakdown Table
+          Live {fromCurrency} to {toCurrency} Exchange Rate Table (Today)
         </h3>
         <p className="text-sm text-slate-500 mt-1">
-          Quick reference for popular {fromCurrency} to {toCurrency} and {toCurrency} to {fromCurrency} amounts.
+          Quick calculation reference for popular {fromCurrency} to {toCurrency} and reverse conversions at today's mid-market rate.
         </p>
       </div>
 
