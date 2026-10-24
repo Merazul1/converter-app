@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { ArrowLeft, ShieldCheck, FileText, Mail, Coins } from 'lucide-react';
 import type { LegalTab } from './LegalModal';
 import { ContactForm } from './ContactForm';
+import { ContactInfoCard } from './ContactInfoCard';
 
 interface LegalPageProps {
   type: LegalTab;
@@ -181,37 +182,22 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onBackToHome }) => {
               </h1>
               <p className="text-xs text-slate-400 mb-8">We respond within 24-48 business hours</p>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                <div className="lg:col-span-1 space-y-4">
-                  <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                        <Mail size={20} />
-                      </div>
-                      <div>
-                        <div className="text-xs text-slate-400 uppercase font-bold">Direct Email</div>
-                        <a
-                          href="mailto:support@currenflow.com"
-                          className="text-base font-bold text-blue-600 hover:underline"
-                        >
-                          support@currenflow.com
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-blue-50/50 border border-blue-100 text-xs text-slate-600 space-y-2 leading-relaxed">
-                    <p className="font-bold text-slate-800">Support Hours:</p>
-                    <p>Monday – Friday: 9:00 AM – 6:00 PM UTC</p>
-                    <p>Average response time: &lt; 24 business hours.</p>
-                  </div>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-8">
+                {/* Left Column: Direct Inquiries & Support Details (5 cols) */}
+                <div className="lg:col-span-5">
+                  <ContactInfoCard />
                 </div>
 
-                <div className="lg:col-span-2 p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <h3 className="text-lg font-bold text-slate-900 mb-1">Send Us a Direct Message</h3>
-                  <p className="text-xs text-slate-500 mb-6">
-                    Fill out the form below and our technical support team will get right back to you.
-                  </p>
+                {/* Right Column: Direct Message Form (7 cols) */}
+                <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm">
+                  <div className="mb-6">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight mb-1">
+                      Send Us a Direct Message
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Fill out the form below and our technical support team will reply directly to your email.
+                    </p>
+                  </div>
                   <ContactForm />
                 </div>
               </div>
