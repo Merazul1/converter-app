@@ -52,24 +52,33 @@
     </script>
 
     <h2>Send a Message</h2>
-    <form id="contactForm" style="margin-top: 16px;">
-      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+    <form id="contactForm" style="margin-top: 16px;" novalidate>
+      <!-- Dual Honeypot Anti-Bot Traps -->
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+        <label for="website_url">Leave this field blank</label>
+        <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off">
+      </div>
       <input type="hidden" name="_captcha" value="false">
+
+      <div id="formAlert" style="display: none; margin-bottom: 16px; padding: 12px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 500;"></div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
         <div>
           <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">Your Name *</label>
-          <input type="text" name="name" required placeholder="John Doe" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit;">
+          <input type="text" id="formName" name="name" required maxlength="60" placeholder="John Doe" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit;">
+          <div id="nameError" style="display: none; color: #dc2626; font-size: 0.75rem; font-weight: 600; margin-top: 4px;"></div>
         </div>
         <div>
           <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">Your Email *</label>
-          <input type="email" name="email" required placeholder="john@example.com" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit;">
+          <input type="email" id="formEmail" name="email" required maxlength="100" placeholder="john@example.com" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit;">
+          <div id="emailError" style="display: none; color: #dc2626; font-size: 0.75rem; font-weight: 600; margin-top: 4px;"></div>
         </div>
       </div>
 
       <div style="margin-bottom: 16px;">
         <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">Inquiry Topic</label>
-        <select name="subject" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit; background: white;">
+        <select id="formSubject" name="subject" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit; background: white;">
           <option value="General Inquiry">General Inquiry</option>
           <option value="Exchange Rate Data / API">Exchange Rate Data / API Partnership</option>
           <option value="Feature Suggestion">Feature Suggestion or Feedback</option>
@@ -79,34 +88,145 @@
       </div>
 
       <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">Message *</label>
-        <textarea name="message" required rows="4" placeholder="How can we help you? Please describe your request..." style="width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit; resize: vertical;"></textarea>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase;">Message *</label>
+          <span id="charCounter" style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">0/2000</span>
+        </div>
+        <textarea id="formMessage" name="message" required rows="4" maxlength="2000" placeholder="Please describe your inquiry, question, or exchange rate feedback with as much detail as possible..." style="width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit; resize: vertical;"></textarea>
+        <div id="messageError" style="display: none; color: #dc2626; font-size: 0.75rem; font-weight: 600; margin-top: 4px;"></div>
       </div>
 
-      <button type="submit" id="submitBtn" style="background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; font-family: inherit; transition: background 0.2s;">
-        Send Message
-      </button>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <button type="submit" id="submitBtn" style="background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; font-family: inherit; transition: background 0.2s;">
+          Send Message
+        </button>
+        <span style="font-size: 0.75rem; color: #64748b;">🔒 Protected by Anti-Spam &amp; XSS Verification</span>
+      </div>
 
-      <div id="formStatus" style="display: none; margin-top: 16px; padding: 12px 16px; border-radius: 10px; font-size: 0.9rem;"></div>
+      <div id="formStatus" style="display: none; margin-top: 16px; padding: 14px 18px; border-radius: 10px; font-size: 0.9rem; font-weight: 500;"></div>
     </form>
 
     <script>
+      const pageLoadTime = Date.now();
       const form = document.getElementById('contactForm');
       const submitBtn = document.getElementById('submitBtn');
       const formStatus = document.getElementById('formStatus');
+      const formAlert = document.getElementById('formAlert');
+      const nameInput = document.getElementById('formName');
+      const emailInput = document.getElementById('formEmail');
+      const messageInput = document.getElementById('formMessage');
+      const charCounter = document.getElementById('charCounter');
+
+      const nameError = document.getElementById('nameError');
+      const emailError = document.getElementById('emailError');
+      const messageError = document.getElementById('messageError');
+
+      // Live char counter
+      messageInput.addEventListener('input', () => {
+        charCounter.textContent = messageInput.value.length + '/2000';
+      });
+
+      function sanitize(str) {
+        if (!str) return '';
+        return str
+          .replace(/<[^>]*>?/gm, '')
+          .replace(/javascript:/gi, '')
+          .replace(/on\w+\s*=/gi, '')
+          .replace(/[<>]/g, '')
+          .trim();
+      }
+
+      const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+      const NAME_REGEX = /^[a-zA-ZÀ-ÿ0-9\s'.-]{2,60}$/;
+      const URL_REGEX = /(https?:\/\/|www\.|\.com\b|\.org\b|\.net\b|\.io\b|\.ru\b|\.xyz\b)/gi;
 
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
-        formStatus.style.display = 'none';
 
-        const formData = new FormData(form);
+        // 1. Check rate limit
+        const lastSent = localStorage.getItem('currenflow_contact_last_sent');
+        if (lastSent && (Date.now() - parseInt(lastSent, 10) < 60000)) {
+          const remaining = Math.ceil((60000 - (Date.now() - parseInt(lastSent, 10))) / 1000);
+          showAlert('Please wait ' + remaining + ' seconds before sending another message.', '#fef2f2', '#991b1b', '#fecaca');
+          return;
+        }
+
+        // 2. Honeypot check
+        const honey = form._honey.value;
+        const fakeUrl = form.website_url.value;
+        if (honey || fakeUrl) {
+          showSuccess();
+          return;
+        }
+
+        // 3. Time on page check (min 3.5s)
+        if (Date.now() - pageLoadTime < 3500) {
+          showAlert('Submission occurred unusually fast. Please wait a moment.', '#fef2f2', '#991b1b', '#fecaca');
+          return;
+        }
+
+        // Reset errors
+        nameError.style.display = 'none';
+        emailError.style.display = 'none';
+        messageError.style.display = 'none';
+        nameInput.style.borderColor = '#cbd5e1';
+        emailInput.style.borderColor = '#cbd5e1';
+        messageInput.style.borderColor = '#cbd5e1';
+        formAlert.style.display = 'none';
+
+        let isValid = true;
+
+        // Name validation
+        const cleanName = sanitize(nameInput.value);
+        if (!cleanName || cleanName.length < 2) {
+          nameError.textContent = 'Please enter at least 2 characters.';
+          nameError.style.display = 'block';
+          nameInput.style.borderColor = '#ef4444';
+          isValid = false;
+        } else if (!NAME_REGEX.test(cleanName) || URL_REGEX.test(cleanName)) {
+          nameError.textContent = 'Name contains invalid characters or links.';
+          nameError.style.display = 'block';
+          nameInput.style.borderColor = '#ef4444';
+          isValid = false;
+        }
+
+        // Email validation
+        const cleanEmail = emailInput.value.trim();
+        if (!cleanEmail || !EMAIL_REGEX.test(cleanEmail)) {
+          emailError.textContent = 'Please enter a valid email address.';
+          emailError.style.display = 'block';
+          emailInput.style.borderColor = '#ef4444';
+          isValid = false;
+        }
+
+        // Message validation
+        const cleanMessage = sanitize(messageInput.value);
+        if (!cleanMessage || cleanMessage.length < 15) {
+          messageError.textContent = 'Message must be at least 15 characters long.';
+          messageError.style.display = 'block';
+          messageInput.style.borderColor = '#ef4444';
+          isValid = false;
+        } else {
+          const links = cleanMessage.match(URL_REGEX);
+          if (links && links.length > 2) {
+            messageError.textContent = 'Messages cannot contain more than 2 web links.';
+            messageError.style.display = 'block';
+            messageInput.style.borderColor = '#ef4444';
+            isValid = false;
+          }
+        }
+
+        if (!isValid) return;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Verifying & Sending...';
+
         const data = {
-          name: formData.get('name'),
-          email: formData.get('email'),
-          _subject: '[CurrenFlow Contact] ' + formData.get('subject') + ' from ' + formData.get('name'),
-          message: formData.get('message'),
+          name: cleanName,
+          email: cleanEmail,
+          subject: form.subject.value,
+          _subject: '[CurrenFlow Contact] ' + form.subject.value + ' from ' + cleanName,
+          message: cleanMessage,
           _captcha: 'false'
         };
 
@@ -118,26 +238,36 @@
           });
           const result = await res.json();
           if (res.ok && (result.success === 'true' || result.success === true || res.status === 200)) {
-            formStatus.style.display = 'block';
-            formStatus.style.background = '#ecfdf5';
-            formStatus.style.color = '#065f46';
-            formStatus.style.border = '1px solid #a7f3d0';
-            formStatus.textContent = '✓ Message sent successfully! We will get back to you within 24-48 business hours.';
+            localStorage.setItem('currenflow_contact_last_sent', Date.now().toString());
+            showSuccess();
             form.reset();
+            charCounter.textContent = '0/2000';
           } else {
             throw new Error(result.message || 'Error submitting message.');
           }
         } catch (err) {
-          formStatus.style.display = 'block';
-          formStatus.style.background = '#fef2f2';
-          formStatus.style.color = '#991b1b';
-          formStatus.style.border = '1px solid #fecaca';
-          formStatus.textContent = '✕ Could not send message. Please email support@currenflow.com directly.';
+          showAlert('✕ Could not send message. Please email support@currenflow.com directly.', '#fef2f2', '#991b1b', '#fecaca');
         } finally {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Send Message';
         }
       });
+
+      function showAlert(msg, bg, color, border) {
+        formAlert.style.display = 'block';
+        formAlert.style.background = bg;
+        formAlert.style.color = color;
+        formAlert.style.border = '1px solid ' + border;
+        formAlert.textContent = msg;
+      }
+
+      function showSuccess() {
+        formStatus.style.display = 'block';
+        formStatus.style.background = '#ecfdf5';
+        formStatus.style.color = '#065f46';
+        formStatus.style.border = '1px solid #a7f3d0';
+        formStatus.textContent = '✓ Message verified and delivered! We will reply to your email within 24-48 business hours.';
+      }
     </script>
 
     <h2>Website Information</h2>
