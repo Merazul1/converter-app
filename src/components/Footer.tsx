@@ -15,7 +15,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
           {/* Brand Info */}
           <div className="md:col-span-1">
-            <a href="https://currenflow.com/" className="flex items-center gap-2 mb-4 group cursor-pointer inline-flex" title="CurrenFlow">
+            <a href="https://www.currenflow.com/" className="flex items-center gap-2 mb-4 group cursor-pointer inline-flex" title="CurrenFlow">
               <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
                 <Coins size={18} />
               </div>
@@ -31,25 +31,30 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
             </div>
           </div>
 
-          {/* Popular Pairs Links (SEO booster) */}
+          {/* Popular Pairs Links (SEO booster - all internal crawlable anchors) */}
           <div className="md:col-span-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Popular Currency Pairs
+              Popular Currency Pairs (Live Rates)
             </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-              {POPULAR_PAIRS.map((pair) => (
-                <button
-                  key={`${pair.from}-${pair.to}`}
-                  type="button"
-                  onClick={() => {
-                    onSelectPair(pair.from, pair.to);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="text-left text-xs text-slate-400 hover:text-white transition-colors cursor-pointer py-1"
-                >
-                  {pair.from} to {pair.to} Calculator
-                </button>
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {POPULAR_PAIRS.map((pair) => {
+                const path = `/${pair.from.toLowerCase()}-to-${pair.to.toLowerCase()}`;
+                return (
+                  <a
+                    key={`${pair.from}-${pair.to}`}
+                    href={path}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onSelectPair(pair.from, pair.to);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="text-left text-xs text-slate-400 hover:text-white transition-colors py-0.5 truncate"
+                    title={`Convert ${pair.from} to ${pair.to}`}
+                  >
+                    {pair.from} to {pair.to}
+                  </a>
+                );
+              })}
             </div>
           </div>
 
@@ -60,31 +65,40 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
             </h4>
             <ul className="space-y-2 text-xs mb-4">
               <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenLegal('privacy')}
-                  className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                <a
+                  href="/privacy-policy.html"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onOpenLegal('privacy');
+                  }}
+                  className="text-slate-400 hover:text-white transition-colors"
                 >
                   Privacy Policy
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenLegal('terms')}
-                  className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                <a
+                  href="/terms-of-service.html"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onOpenLegal('terms');
+                  }}
+                  className="text-slate-400 hover:text-white transition-colors"
                 >
                   Terms of Service
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenLegal('contact')}
-                  className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                <a
+                  href="/contact.html"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onOpenLegal('contact');
+                  }}
+                  className="text-slate-400 hover:text-white transition-colors"
                 >
                   Contact & Support
-                </button>
+                </a>
               </li>
             </ul>
             <p className="text-[11px] text-slate-500 leading-relaxed">
@@ -97,21 +111,38 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} CurrenFlow (currenflow.com). All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => onOpenLegal('privacy')}
-              className="hover:text-slate-400 transition-colors cursor-pointer"
+            <a
+              href="/privacy-policy.html"
+              onClick={(e) => {
+                e.preventDefault();
+                onOpenLegal('privacy');
+              }}
+              className="hover:text-slate-400 transition-colors"
             >
               Privacy
-            </button>
+            </a>
             <span>•</span>
-            <button
-              type="button"
-              onClick={() => onOpenLegal('terms')}
-              className="hover:text-slate-400 transition-colors cursor-pointer"
+            <a
+              href="/terms-of-service.html"
+              onClick={(e) => {
+                e.preventDefault();
+                onOpenLegal('terms');
+              }}
+              className="hover:text-slate-400 transition-colors"
             >
               Terms
-            </button>
+            </a>
+            <span>•</span>
+            <a
+              href="/contact.html"
+              onClick={(e) => {
+                e.preventDefault();
+                onOpenLegal('contact');
+              }}
+              className="hover:text-slate-400 transition-colors"
+            >
+              Contact
+            </a>
             <span>•</span>
             <span className="flex items-center gap-1">
               Made for users <Heart size={12} className="text-rose-500 fill-rose-500" />

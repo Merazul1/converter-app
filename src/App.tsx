@@ -104,20 +104,22 @@ export function App() {
       const fromName = fromObj?.name || fromCurrency;
       const toName = toObj?.name || toCurrency;
 
-      // Update Document Title for search engines (CTR-optimized)
+      // Update Document Title for search engines (CTR & character length optimized < 60 chars)
       const isDefaultHome = fromCurrency === 'USD' && toCurrency === 'EUR' && window.location.pathname === '/';
       if (isDefaultHome) {
-        document.title = 'CurrenFlow: Live Currency Converter & Exchange Rates Calculator (Today)';
+        document.title = 'CurrenFlow - Live Currency Converter & Exchange Rates';
       } else {
-        document.title = `${fromCurrency} to ${toCurrency}: Live ${fromName} to ${toName} Rate (Today) | CurrenFlow`;
+        document.title = `${fromCurrency} to ${toCurrency} Rate Today - CurrenFlow Converter`;
       }
 
-      // Update Meta Description
+      // Update Meta Description (length optimized < 160 chars)
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
         metaDesc.setAttribute(
           'content',
-          `Convert ${fromCurrency} to ${toCurrency} (${fromName} to ${toName}) at live mid-market exchange rate today. Real-time calculator with zero hidden bank fees, comparison charts, and breakdown tables.`
+          isDefaultHome
+            ? 'Convert 160+ currencies with real-time mid-market exchange rates today. Free currency converter calculator with zero hidden fees and live forex data.'
+            : `Convert ${fromCurrency} to ${toCurrency} (${fromName} to ${toName}) at live mid-market exchange rates today. Free currency calculator with live forex data.`
         );
       }
 
@@ -126,7 +128,9 @@ export function App() {
       if (canonical) {
         canonical.setAttribute(
           'href',
-          `https://www.currenflow.com/${fromCurrency.toLowerCase()}-to-${toCurrency.toLowerCase()}`
+          isDefaultHome
+            ? 'https://www.currenflow.com/'
+            : `https://www.currenflow.com/${fromCurrency.toLowerCase()}-to-${toCurrency.toLowerCase()}`
         );
       }
     }
