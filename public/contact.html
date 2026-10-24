@@ -36,8 +36,97 @@
       <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0;">Typical response time: 24 to 48 business hours.</p>
     </div>
 
+    <h2>Send a Message</h2>
+    <form id="contactForm" style="margin-top: 16px;">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+      <input type="hidden" name="_captcha" value="false">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">Your Name *</label>
+          <input type="text" name="name" required placeholder="John Doe" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">Your Email *</label>
+          <input type="email" name="email" required placeholder="john@example.com" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit;">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">Inquiry Topic</label>
+        <select name="subject" style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit; background: white;">
+          <option value="General Inquiry">General Inquiry</option>
+          <option value="Exchange Rate Data / API">Exchange Rate Data / API Partnership</option>
+          <option value="Feature Suggestion">Feature Suggestion or Feedback</option>
+          <option value="Bug / Technical Issue">Bug or Rate Discrepancy Report</option>
+          <option value="Advertising & Sponsorship">Advertising &amp; Sponsorship</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">Message *</label>
+        <textarea name="message" required rows="4" placeholder="How can we help you? Please describe your request..." style="width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit; resize: vertical;"></textarea>
+      </div>
+
+      <button type="submit" id="submitBtn" style="background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; font-family: inherit; transition: background 0.2s;">
+        Send Message
+      </button>
+
+      <div id="formStatus" style="display: none; margin-top: 16px; padding: 12px 16px; border-radius: 10px; font-size: 0.9rem;"></div>
+    </form>
+
+    <script>
+      const form = document.getElementById('contactForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const formStatus = document.getElementById('formStatus');
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        formStatus.style.display = 'none';
+
+        const formData = new FormData(form);
+        const data = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          _subject: '[CurrenFlow Contact] ' + formData.get('subject') + ' from ' + formData.get('name'),
+          message: formData.get('message'),
+          _captcha: 'false'
+        };
+
+        try {
+          const res = await fetch('https://formsubmit.co/ajax/support@currenflow.com', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const result = await res.json();
+          if (res.ok && (result.success === 'true' || result.success === true || res.status === 200)) {
+            formStatus.style.display = 'block';
+            formStatus.style.background = '#ecfdf5';
+            formStatus.style.color = '#065f46';
+            formStatus.style.border = '1px solid #a7f3d0';
+            formStatus.textContent = '✓ Message sent successfully! We will get back to you within 24-48 business hours.';
+            form.reset();
+          } else {
+            throw new Error(result.message || 'Error submitting message.');
+          }
+        } catch (err) {
+          formStatus.style.display = 'block';
+          formStatus.style.background = '#fef2f2';
+          formStatus.style.color = '#991b1b';
+          formStatus.style.border = '1px solid #fecaca';
+          formStatus.textContent = '✕ Could not send message. Please email support@currenflow.com directly.';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send Message';
+        }
+      });
+    </script>
+
     <h2>Website Information</h2>
-    <p><strong>Website:</strong> <a href="https://currenflow.com">https://currenflow.com</a></p>
+    <p><strong>Website:</strong> <a href="https://www.currenflow.com">https://www.currenflow.com</a></p>
     <p><strong>Purpose:</strong> Free real-time foreign exchange calculation, currency conversion, and financial rate comparison.</p>
   </div>
 </body>
