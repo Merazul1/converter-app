@@ -38,32 +38,32 @@ export const ContactInfoCard: React.FC = () => {
           Need assistance with exchange rate calculations, partnership integrations, or custom API access? Reach our engineering team directly:
         </p>
 
-        {/* Email Address Container with Copy Action */}
-        <div className="p-3 rounded-2xl bg-slate-100/80 border border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
-          <div className="min-w-0 px-1">
-            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Official Email
+        {/* Email Address Container with full-width layout and actions */}
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
+          <div>
+            <span className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">
+              Official Email Address
             </span>
-            <span className="block text-sm sm:text-base font-bold text-slate-900 truncate select-all">
+            <div className="text-base sm:text-lg font-black text-slate-900 tracking-tight break-all select-all font-mono">
               {CONTACT_CONFIG.recipientEmail}
-            </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-1.5 shrink-0">
+          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/70">
             <button
               type="button"
               onClick={handleCopy}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs hover:border-slate-300 transition-all cursor-pointer"
+              className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 shadow-2xs hover:border-slate-300 transition-all cursor-pointer"
               title="Copy email to clipboard"
             >
               {copied ? (
                 <>
-                  <Check size={13} className="text-emerald-600" />
-                  <span className="text-emerald-700 font-bold">Copied</span>
+                  <Check size={14} className="text-emerald-600 shrink-0" />
+                  <span className="text-emerald-700 font-bold">Copied!</span>
                 </>
               ) : (
                 <>
-                  <Copy size={13} />
+                  <Copy size={14} className="shrink-0" />
                   <span>Copy</span>
                 </>
               )}
@@ -71,11 +71,11 @@ export const ContactInfoCard: React.FC = () => {
 
             <a
               href={`mailto:${CONTACT_CONFIG.recipientEmail}`}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs hover:shadow-blue-500/20 transition-all"
+              className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs hover:shadow-blue-500/20 transition-all text-center"
               title="Open default email application"
             >
               <span>Mail</span>
-              <ExternalLink size={12} />
+              <ExternalLink size={13} className="shrink-0" />
             </a>
           </div>
         </div>
