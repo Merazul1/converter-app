@@ -1,29 +1,38 @@
 import React from 'react';
 import { formatNumber } from '../services/currencyService';
+import type { TranslationDict } from '../i18n/translations';
 
 interface ConversionTableProps {
   fromCurrency: string;
   toCurrency: string;
   rate: number;
   inverseRate: number;
+  dict?: TranslationDict;
 }
 
 export const ConversionTable: React.FC<ConversionTableProps> = ({
   fromCurrency,
   toCurrency,
   rate,
-  inverseRate
+  inverseRate,
+  dict,
 }) => {
   const tableValues = [1, 5, 10, 25, 50, 100, 250, 500, 1000, 5000];
+
+  const title = dict
+    ? `${dict.table.title}: ${fromCurrency} / ${toCurrency}`
+    : `Live ${fromCurrency} to ${toCurrency} Exchange Rate Table (Today)`;
+  const subtitle = dict?.table.subtitle || `Quick calculation reference for popular ${fromCurrency} to ${toCurrency} and reverse conversions at today's mid-market rate.`;
+  const reverseTitle = dict?.table.reverseTitle || 'Reverse Conversion Table';
 
   return (
     <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200/80">
       <div className="mb-6">
         <h3 className="text-xl font-bold text-slate-900">
-          Live {fromCurrency} to {toCurrency} Exchange Rate Table (Today)
+          {title}
         </h3>
         <p className="text-sm text-slate-500 mt-1">
-          Quick calculation reference for popular {fromCurrency} to {toCurrency} and reverse conversions at today's mid-market rate.
+          {subtitle}
         </p>
       </div>
 
@@ -54,7 +63,10 @@ export const ConversionTable: React.FC<ConversionTableProps> = ({
         {/* Right Column: To -> From (Reverse) */}
         <div className="border border-slate-200 rounded-2xl overflow-hidden">
           <div className="bg-slate-50 px-4 py-3 border-b border-slate-200 font-bold text-sm text-slate-800 flex items-center justify-between">
-            <span>{toCurrency}</span>
+            <span className="flex items-center gap-1.5">
+              <span>{toCurrency}</span>
+              <span className="text-xs font-normal text-slate-500 hidden sm:inline">({reverseTitle})</span>
+            </span>
             <span>{fromCurrency}</span>
           </div>
           <div className="divide-y divide-slate-100 font-mono text-sm">

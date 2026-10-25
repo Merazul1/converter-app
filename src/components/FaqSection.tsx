@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import { FAQ_DATA } from '../data/faqData';
+import type { TranslationDict } from '../i18n/translations';
 
-export const FaqSection: React.FC = () => {
+interface FaqSectionProps {
+  dict?: TranslationDict;
+}
+
+export const FaqSection: React.FC<FaqSectionProps> = ({ dict }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggle = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx);
   };
+
+  const badgeText = dict?.faq.badge || 'Got Questions?';
+  const titleText = dict?.faq.title || 'Frequently Asked Questions';
+  const subtitleText = dict?.faq.subtitle || 'Everything you need to know about live foreign exchange rates, accuracy, and conversions.';
+  const items = dict?.faq.items || FAQ_DATA;
 
   return (
     <section className="bg-white rounded-3xl p-6 md:p-10 border border-slate-200/80 shadow-sm">
@@ -16,19 +26,19 @@ export const FaqSection: React.FC = () => {
           <HelpCircle size={18} />
         </div>
         <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
-          Got Questions?
+          {badgeText}
         </span>
       </div>
 
       <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-        Frequently Asked Questions
+        {titleText}
       </h3>
       <p className="text-sm text-slate-500 mb-8">
-        Everything you need to know about live foreign exchange rates, accuracy, and conversions.
+        {subtitleText}
       </p>
 
       <div className="divide-y divide-slate-100">
-        {FAQ_DATA.map((item, idx) => {
+        {items.map((item, idx) => {
           const isOpen = openIndex === idx;
           return (
             <div key={idx} className="py-4 first:pt-0 last:pb-0">

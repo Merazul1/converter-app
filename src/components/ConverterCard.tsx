@@ -4,6 +4,7 @@ import { CurrencySelector } from './CurrencySelector';
 import { CURRENCIES } from '../data/currencies';
 import type { RatesData } from '../types/currency';
 import { convertCurrency, formatNumber } from '../services/currencyService';
+import type { TranslationDict } from '../i18n/translations';
 
 interface ConverterCardProps {
   ratesData: RatesData | null;
@@ -15,6 +16,7 @@ interface ConverterCardProps {
   setToCurrency: (code: string) => void;
   amount: number;
   setAmount: (amt: number) => void;
+  dict?: TranslationDict;
 }
 
 export const ConverterCard: React.FC<ConverterCardProps> = ({
@@ -26,10 +28,13 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
   setFromCurrency,
   setToCurrency,
   amount,
-  setAmount
+  setAmount,
+  dict,
 }) => {
   const [copied, setCopied] = useState(false);
   const [isSwapping, setIsSwapping] = useState(false);
+
+  const t = dict?.converter;
 
   const fromCurrObj = CURRENCIES.find((c) => c.code === fromCurrency) || {
     code: fromCurrency,
@@ -80,10 +85,10 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
           </div>
           <div>
             <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-              Live Currency Converter
+              {t?.liveRateToday || 'Live Currency Converter'}
             </h2>
             <p className="text-xs text-slate-500">
-              Real-time mid-market interbank exchange rate
+              {t?.midMarketRate || 'Real-time mid-market interbank exchange rate'}
             </p>
           </div>
         </div>
@@ -109,7 +114,7 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
       {/* Amount Input */}
       <div className="mb-6">
         <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-          Amount to Convert
+          {t?.amount || 'Amount to Convert'}
         </label>
         <div className="relative">
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-slate-400 font-mono">
@@ -135,7 +140,7 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
         {/* Quick Amount Pills */}
         <div className="flex items-center gap-2 mt-3 overflow-x-auto pb-1 no-scrollbar">
           <span className="text-[11px] font-medium text-slate-400 shrink-0">
-            Quick:
+            {t?.quickConvert || 'Quick'}:
           </span>
           {quickAmounts.map((amt) => (
             <button
@@ -157,7 +162,7 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
       {/* Currency Pickers + Swap Button */}
       <div className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr] items-end gap-3 md:gap-4 mb-6">
         <CurrencySelector
-          label="From Currency"
+          label={t?.from || 'From Currency'}
           selectedCode={fromCurrency}
           onSelect={setFromCurrency}
         />
@@ -167,7 +172,7 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
           <button
             type="button"
             onClick={handleSwap}
-            title="Swap Currencies"
+            title={t?.swapCurrencies || 'Swap Currencies'}
             className={`w-12 h-12 rounded-2xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 border border-slate-200 hover:border-blue-200 flex items-center justify-center transition-all cursor-pointer shadow-xs ${
               isSwapping ? 'rotate-180 scale-105' : 'hover:scale-105'
             }`}
@@ -177,20 +182,20 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
         </div>
 
         <CurrencySelector
-          label="To Currency"
+          label={t?.to || 'To Currency'}
           selectedCode={toCurrency}
           onSelect={setToCurrency}
         />
       </div>
 
-      {/* Convert / Action Button - Styled matching Step #3 in user image! */}
+      {/* Convert / Action Button */}
       <button
         type="button"
         onClick={() => {}}
         className="w-full py-4 px-6 bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-950 font-bold text-lg rounded-2xl shadow-lg shadow-amber-400/20 transition-all duration-150 transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer mb-6"
       >
         <Sparkles size={20} className="text-amber-900" />
-        Convert {fromCurrency} to {toCurrency}
+        {t?.quickConvert ? `${t.quickConvert} ${fromCurrency} → ${toCurrency}` : `Convert ${fromCurrency} to ${toCurrency}`}
       </button>
 
       {/* Prominent Conversion Result Card */}
@@ -210,12 +215,12 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
             {copied ? (
               <>
                 <Check size={14} className="text-emerald-400" />
-                <span className="text-emerald-400">Copied!</span>
+                <span className="text-emerald-400">{t?.copied || 'Copied!'}</span>
               </>
             ) : (
               <>
                 <Copy size={14} />
-                <span>Copy Result</span>
+                <span>{t?.copyResult || 'Copy Result'}</span>
               </>
             )}
           </button>

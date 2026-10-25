@@ -2,13 +2,24 @@ import React from 'react';
 import { Coins, Heart } from 'lucide-react';
 import { POPULAR_PAIRS } from '../data/currencies';
 import type { LegalTab } from './LegalModal';
+import type { Language, TranslationDict } from '../i18n/translations';
 
 interface FooterProps {
   onSelectPair: (from: string, to: string) => void;
   onOpenLegal: (tab: LegalTab) => void;
+  dict?: TranslationDict;
+  currentLang?: Language;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => {
+export const Footer: React.FC<FooterProps> = ({
+  onSelectPair,
+  onOpenLegal,
+  dict,
+  currentLang = 'en',
+}) => {
+  const langPrefix = currentLang && currentLang !== 'en' ? `/${currentLang}` : '';
+  const f = dict?.footer;
+
   return (
     <footer className="bg-slate-900 text-slate-400 pt-16 pb-12 mt-20 border-t border-slate-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -24,7 +35,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
               </span>
             </a>
             <p className="text-xs text-slate-400 leading-relaxed mb-4">
-              Fast, free, and accurate currency converter with real-time mid-market exchange rates for global commerce, travel, and financial planning.
+              {f?.tagline || 'Fast, free, and accurate currency converter with real-time mid-market exchange rates for global commerce, travel, and financial planning.'}
             </p>
             <div className="text-[11px] text-slate-500">
               Built with precision for 95+ Core Web Vitals speed.
@@ -34,11 +45,11 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
           {/* Popular Pairs Links (SEO booster - all internal crawlable anchors) */}
           <div className="md:col-span-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Popular Currency Pairs (Live Rates)
+              {f?.popularPairs || 'Popular Currency Pairs (Live Rates)'}
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {POPULAR_PAIRS.map((pair) => {
-                const path = `/${pair.from.toLowerCase()}-to-${pair.to.toLowerCase()}`;
+                const path = `${langPrefix}/${pair.from.toLowerCase()}-to-${pair.to.toLowerCase()}`;
                 return (
                   <a
                     key={`${pair.from}-${pair.to}`}
@@ -61,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
           {/* Compliance & Legal Links */}
           <div className="md:col-span-1">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Legal & Compliance
+              {f?.legalTitle || 'Legal & Compliance'}
             </h4>
             <ul className="space-y-2 text-xs mb-4">
               <li>
@@ -73,7 +84,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
                   }}
                   className="text-slate-400 hover:text-white transition-colors"
                 >
-                  Privacy Policy
+                  {f?.privacy || 'Privacy Policy'}
                 </a>
               </li>
               <li>
@@ -85,7 +96,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
                   }}
                   className="text-slate-400 hover:text-white transition-colors"
                 >
-                  Terms of Service
+                  {f?.terms || 'Terms of Service'}
                 </a>
               </li>
               <li>
@@ -97,19 +108,19 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
                   }}
                   className="text-slate-400 hover:text-white transition-colors"
                 >
-                  Contact & Support
+                  {f?.contact || 'Contact & Support'}
                 </a>
               </li>
             </ul>
             <p className="text-[11px] text-slate-500 leading-relaxed">
-              Exchange rate figures are sourced from central and interbank feeds for informational purposes only.
+              {f?.disclaimer || 'Exchange rate figures are sourced from central and interbank feeds for informational purposes only.'}
             </p>
           </div>
         </div>
 
         {/* Bottom copyright & legal links */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} CurrenFlow (currenflow.com). All rights reserved.</p>
+          <p>© {new Date().getFullYear()} CurrenFlow (currenflow.com). {f?.rights || 'All rights reserved.'}</p>
           <div className="flex items-center gap-4">
             <a
               href="/privacy-policy.html"
@@ -119,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
               }}
               className="hover:text-slate-400 transition-colors"
             >
-              Privacy
+              {f?.privacy || 'Privacy'}
             </a>
             <span>•</span>
             <a
@@ -130,7 +141,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
               }}
               className="hover:text-slate-400 transition-colors"
             >
-              Terms
+              {f?.terms || 'Terms'}
             </a>
             <span>•</span>
             <a
@@ -141,7 +152,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectPair, onOpenLegal }) => 
               }}
               className="hover:text-slate-400 transition-colors"
             >
-              Contact
+              {f?.contact || 'Contact'}
             </a>
             <span>•</span>
             <span className="flex items-center gap-1">
