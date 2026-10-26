@@ -15,10 +15,8 @@ import type { RatesData } from './types/currency';
 import { fetchExchangeRates, convertCurrency } from './services/currencyService';
 import { CURRENCIES, POPULAR_PAIRS } from './data/currencies';
 import { TrendingUp, ShieldCheck } from 'lucide-react';
-import { TRANSLATIONS, type Language, getLocalizedSeo } from './i18n/translations';
 
 export function App() {
-  const [currentLang, setCurrentLang] = useState<Language>('en');
   const [ratesData, setRatesData] = useState<RatesData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [amount, setAmount] = useState<number>(100);
@@ -30,79 +28,47 @@ export function App() {
   const [activeLegalTab, setActiveLegalTab] = useState<LegalTab>('privacy');
   const [pageView, setPageView] = useState<'home' | 'privacy' | 'terms' | 'contact'>('home');
 
-  const dict = TRANSLATIONS[currentLang];
-
-  // Handle language change with clean URL updates
-  const handleSelectLanguage = useCallback((newLang: Language) => {
-    setCurrentLang(newLang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('currenflow_lang', newLang);
-      document.documentElement.lang = newLang;
-      document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
-
-      const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, '');
-      const cleanPath = currentPath.replace(/^\/(es|ar)/, '') || '';
-      const newPrefix = newLang === 'en' ? '' : `/${newLang}`;
-      const nextUrl = `${newPrefix}${cleanPath}` || '/';
-      if (window.location.pathname !== nextUrl) {
-        window.history.pushState(null, '', nextUrl);
-      }
-    }
-  }, []);
-
-  // Change pair and update URL without full page reload
+  // Change currency pair and update URL without full page reload
   const updatePair = useCallback((from: string, to: string) => {
     setPageView('home');
     setFromCurrency(from);
     setToCurrency(to);
     if (typeof window !== 'undefined') {
-      const langPrefix = currentLang === 'en' ? '' : `/${currentLang}`;
-      const newPath = `${langPrefix}/${from.toLowerCase()}-to-${to.toLowerCase()}`;
+      const newPath = `/${from.toLowerCase()}-to-${to.toLowerCase()}`;
       if (window.location.pathname !== newPath) {
         window.history.pushState({ from, to }, '', newPath);
       }
     }
-  }, [currentLang]);
+  }, []);
 
   // Parse path or query params on initial load
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      // Ensure English LTR on document root
+      document.documentElement.lang = 'en';
+      document.documentElement.dir = 'ltr';
+
       const parseLocation = () => {
-        const rawPath = window.location.pathname.toLowerCase().replace(/\/$/, '');
-        let detectedLang: Language = 'en';
-        let path = rawPath;
-
-        // Detect language prefix
-        if (rawPath.startsWith('/es')) {
-          detectedLang = 'es';
-          path = rawPath.replace(/^\/es/, '') || '/';
-        } else if (rawPath.startsWith('/ar')) {
-          detectedLang = 'ar';
-          path = rawPath.replace(/^\/ar/, '') || '/';
-        }
-
-        setCurrentLang(detectedLang);
-        document.documentElement.lang = detectedLang;
-        document.documentElement.dir = detectedLang === 'ar' ? 'rtl' : 'ltr';
+        const rawPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
 
         // 1. Check legal paths: /privacy-policy, /terms-of-service, /contact
-        if (path === '/privacy-policy') {
+        if (rawPath === '/privacy-policy') {
           setPageView('privacy');
           return;
         }
-        if (path === '/terms-of-service') {
+        if (rawPath === '/terms-of-service') {
           setPageView('terms');
           return;
         }
-        if (path === '/contact') {
+        if (rawPath === '/contact') {
           setPageView('contact');
           return;
         }
 
         setPageView('home');
 
-        // 2. Check currency pair pathname: e.g. /usd-to-eur or /es/usd-to-eur
-        const pathMatch = path.match(/\/([a-z]{3})-to-([a-z]{3})/i);
+        // 2. Check currency pair pathname: e.g. /usd-to-eur
+        const pathMatch = rawPath.match(/\/([a-z]{3})-to-([a-z]{3})/i);
         if (pathMatch) {
           const from = pathMatch[1].toUpperCase();
           const to = pathMatch[2].toUpperCase();
@@ -134,7 +100,7 @@ export function App() {
     }
   }, []);
 
-  // Dynamic SEO Title, Description, Canonical, and hreflang updates
+  // Dynamic SEO Title, Description, and Canonical updates
   useEffect(() => {
     if (typeof window !== 'undefined' && pageView === 'home') {
       const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
@@ -142,48 +108,42 @@ export function App() {
       const fromName = fromObj?.name || fromCurrency;
       const toName = toObj?.name || toCurrency;
 
-      // Update Document Title and Meta Description in active language
-      const seo = getLocalizedSeo(currentLang, fromCurrency, toCurrency, fromName, toName);
-      document.title = seo.title;
+      const isDefaultHome = fromCurrency === 'USD' && toCurrency === 'EUR' && window.location.pathname === '/';
+      const pairSlug = isDefaultHome ? '' : `/${fromCurrency.toLowerCase()}-to-${toCurrency.toLowerCase()}`;
+      const canonicalUrl = `https://www.currenflow.com${pairSlug || '/'}`;
+
+      if (isDefaultHome) {
+        document.title = 'CurrenFlow - Live Currency Converter & Exchange Rates';
+      } else {
+        document.title = `${fromCurrency} to ${toCurrency} Exchange Rate - Live ${fromName} to ${toName} | CurrenFlow`;
+      }
 
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
-        metaDesc.setAttribute('content', seo.description);
+        if (isDefaultHome) {
+          metaDesc.setAttribute(
+            'content',
+            'Convert 160+ currencies with real-time mid-market exchange rates today. Free currency converter calculator with zero hidden fees and live forex data.'
+          );
+        } else {
+          metaDesc.setAttribute(
+            'content',
+            `Convert ${fromCurrency} (${fromName}) to ${toCurrency} (${toName}) with live mid-market rates today. Free real-time foreign exchange calculator on CurrenFlow.`
+          );
+        }
       }
 
       // Update Canonical Link
       const canonical = document.querySelector('link[rel="canonical"]');
-      const isDefaultHome = fromCurrency === 'USD' && toCurrency === 'EUR' && (window.location.pathname === '/' || window.location.pathname === '/es' || window.location.pathname === '/ar');
-      const pairSlug = isDefaultHome ? '' : `/${fromCurrency.toLowerCase()}-to-${toCurrency.toLowerCase()}`;
-      const canonicalUrl = currentLang === 'en'
-        ? `https://www.currenflow.com${pairSlug || '/'}`
-        : `https://www.currenflow.com/${currentLang}${pairSlug}`;
-
       if (canonical) {
         canonical.setAttribute('href', canonicalUrl);
       }
 
-      // Update hreflang Alternate tags for Google global indexing
-      const basePairSlug = isDefaultHome ? '' : `/${fromCurrency.toLowerCase()}-to-${toCurrency.toLowerCase()}`;
-      const hreflangConfigs = [
-        { lang: 'x-default', href: `https://www.currenflow.com${basePairSlug || '/'}` },
-        { lang: 'en', href: `https://www.currenflow.com${basePairSlug || '/'}` },
-        { lang: 'es', href: `https://www.currenflow.com/es${basePairSlug}` },
-        { lang: 'ar', href: `https://www.currenflow.com/ar${basePairSlug}` },
-      ];
-
-      hreflangConfigs.forEach(({ lang, href }) => {
-        let tag = document.querySelector(`link[rel="alternate"][hreflang="${lang}"]`) as HTMLLinkElement | null;
-        if (!tag) {
-          tag = document.createElement('link');
-          tag.rel = 'alternate';
-          tag.hreflang = lang;
-          document.head.appendChild(tag);
-        }
-        tag.href = href;
-      });
+      // Clean up any obsolete hreflang alternate tags
+      const alternateTags = document.querySelectorAll('link[rel="alternate"][hreflang]');
+      alternateTags.forEach((tag) => tag.remove());
     }
-  }, [fromCurrency, toCurrency, pageView, currentLang]);
+  }, [fromCurrency, toCurrency, pageView]);
 
   const loadRates = async () => {
     setIsLoading(true);
@@ -253,46 +213,27 @@ export function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-blue-600 selection:text-white ${currentLang === 'ar' ? 'font-sans' : ''}`}>
-      {/* Top Navbar with Multi-Language Switcher */}
-      <Navbar
-        onOpenEmbed={() => setIsEmbedModalOpen(true)}
-        currentLang={currentLang}
-        onSelectLanguage={handleSelectLanguage}
-        dict={dict}
-      />
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+      {/* Top Navbar */}
+      <Navbar onOpenEmbed={() => setIsEmbedModalOpen(true)} />
 
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-8 pb-16">
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-8">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100/70 text-blue-700 border border-blue-200 mb-4">
-            <TrendingUp size={14} /> {dict.nav.freeLiveRates}
+            <TrendingUp size={14} /> Free Live Rates
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-            {currentLang === 'es' ? (
-              <>Convierte <span className="text-blue-600">{fromCurrency}</span> a <span className="text-amber-500">{toCurrency}</span> en Tiempo Real</>
-            ) : currentLang === 'ar' ? (
-              <>تحويل <span className="text-blue-600">{fromCurrency}</span> إلى <span className="text-amber-500">{toCurrency}</span> بأسعار السوق المباشرة</>
-            ) : (
-              <>Convert <span className="text-blue-600">{fromCurrency}</span> to <span className="text-amber-500">{toCurrency}</span> at Live Market Rates</>
-            )}
+            Convert <span className="text-blue-600">{fromCurrency}</span> to <span className="text-amber-500">{toCurrency}</span> at Live Market Rates
           </h1>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            {currentLang === 'es' ? (
-              <>Tipos de cambio medios del mercado actualizados en tiempo real para <strong className="text-slate-900">{fromObj?.name || fromCurrency}</strong> a <strong className="text-slate-900">{toObj?.name || toCurrency}</strong>. Sin comisiones bancarias ocultas.</>
-            ) : currentLang === 'ar' ? (
-              <>أسعار صرف حقيقية ومباشرة من البنوك المركزية لتحويل <strong className="text-slate-900">{fromObj?.name || fromCurrency}</strong> إلى <strong className="text-slate-900">{toObj?.name || toCurrency}</strong> بدون أي رسوم خفية.</>
-            ) : (
-              <>Accurate, real-time mid-market currency exchange rates for <strong className="text-slate-900">{fromObj?.name || fromCurrency}</strong> to <strong className="text-slate-900">{toObj?.name || toCurrency}</strong>. Zero hidden banking fees, updated automatically every few minutes.</>
-            )}
+            Accurate, real-time mid-market currency exchange rates for <strong className="text-slate-900">{fromObj?.name || fromCurrency}</strong> to <strong className="text-slate-900">{toObj?.name || toCurrency}</strong>. Zero hidden banking fees, updated automatically every few minutes.
           </p>
 
           {/* Quick Popular Pair Shortcuts */}
           <div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
-            <span className="text-xs font-semibold text-slate-400">
-              {currentLang === 'es' ? 'Populares:' : currentLang === 'ar' ? 'الأكثر طلباً:' : 'Trending:'}
-            </span>
+            <span className="text-xs font-semibold text-slate-400">Trending:</span>
             {POPULAR_PAIRS.slice(0, 6).map((pair) => (
               <button
                 key={`${pair.from}-${pair.to}`}
@@ -325,7 +266,6 @@ export function App() {
             setToCurrency={(to) => updatePair(fromCurrency, to)}
             amount={amount}
             setAmount={setAmount}
-            dict={dict}
           />
         </div>
 
@@ -343,7 +283,6 @@ export function App() {
             toCurrency={toCurrency}
             rate={rate}
             inverseRate={inverseRate}
-            dict={dict}
           />
 
           <CurrencyMatrix
@@ -363,7 +302,7 @@ export function App() {
 
         {/* FAQ Accordion */}
         <div className="mb-12">
-          <FaqSection dict={dict} />
+          <FaqSection />
         </div>
 
         {/* Trust Banner */}
@@ -395,8 +334,6 @@ export function App() {
       <Footer
         onSelectPair={(from, to) => updatePair(from, to)}
         onOpenLegal={handleOpenLegal}
-        dict={dict}
-        currentLang={currentLang}
       />
     </div>
   );

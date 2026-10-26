@@ -1,33 +1,8 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/es",
-      "destination": "/es.html"
-    },
-    {
-      "source": "/es/",
-      "destination": "/es.html"
-    },
-    {
-      "source": "/es/:path*",
-      "destination": "/es.html"
-    },
-    {
-      "source": "/ar",
-      "destination": "/ar.html"
-    },
-    {
-      "source": "/ar/",
-      "destination": "/ar.html"
-    },
-    {
-      "source": "/ar/:path*",
-      "destination": "/ar.html"
-    },
-    {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/"
     }
   ],
   "headers": [
