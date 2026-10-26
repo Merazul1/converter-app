@@ -31,14 +31,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEmbed }) => {
             <span>160+ Currencies Supported</span>
           </div>
 
-          <button
+          {/* <button
             type="button"
             onClick={onOpenEmbed}
             className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-bold text-slate-700 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 rounded-xl transition-all cursor-pointer shadow-2xs"
           >
             <Code2 size={15} />
             <span className="hidden xs:inline">Embed Widget</span>
-          </button>
+          </button> */}
         </div>
       </div>
     </header>
