@@ -1,11 +1,11 @@
 import React from 'react';
-import { Coins, Code2, Globe2 } from 'lucide-react';
+import { Coins, Globe2 } from 'lucide-react';
 
 interface NavbarProps {
-  onOpenEmbed: () => void;
+  onOpenEmbed?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenEmbed }) => {
+export const Navbar: React.FC<NavbarProps> = () => {
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80 transition-all">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -26,19 +26,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEmbed }) => {
 
         {/* Action items */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-500 font-medium bg-slate-100/70 px-3 py-1.5 rounded-full">
+          <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium bg-slate-100/70 px-3 py-1.5 rounded-full">
             <Globe2 size={14} className="text-emerald-500" />
             <span>160+ Currencies Supported</span>
           </div>
-
-          {/* <button
-            type="button"
-            onClick={onOpenEmbed}
-            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-bold text-slate-700 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 rounded-xl transition-all cursor-pointer shadow-2xs"
-          >
-            <Code2 size={15} />
-            <span className="hidden xs:inline">Embed Widget</span>
-          </button> */}
         </div>
       </div>
     </header>
