@@ -113,9 +113,9 @@ export function App() {
       const canonicalUrl = `https://www.currenflow.com${pairSlug || '/'}`;
 
       if (isDefaultHome) {
-        document.title = 'CurrenFlow - Live Currency Converter & Exchange Rates';
+        document.title = 'CurrenFlow: Live Currency Converter & Exchange Rates (0% Bank Fees)';
       } else {
-        document.title = `${fromCurrency} to ${toCurrency} Exchange Rate - Live ${fromName} to ${toName} | CurrenFlow`;
+        document.title = `${fromCurrency} to ${toCurrency}: Live Mid-Market Exchange Rate (0% Bank Fees) | CurrenFlow`;
       }
 
       const metaDesc = document.querySelector('meta[name="description"]');
@@ -123,12 +123,12 @@ export function App() {
         if (isDefaultHome) {
           metaDesc.setAttribute(
             'content',
-            'Convert 160+ currencies with real-time mid-market exchange rates today. Free currency converter calculator with zero hidden fees and live forex data.'
+            'Convert 160+ currencies with real-time mid-market exchange rates today (0% bank fees). Free live currency converter calculator with zero hidden markups.'
           );
         } else {
           metaDesc.setAttribute(
             'content',
-            `Convert ${fromCurrency} (${fromName}) to ${toCurrency} (${toName}) with live mid-market rates today. Free real-time foreign exchange calculator on CurrenFlow.`
+            `Convert ${fromCurrency} (${fromName}) to ${toCurrency} (${toName}) at live mid-market rates (0% bank fees). Check real-time exchange tables and calculate conversions on CurrenFlow.`
           );
         }
       }
