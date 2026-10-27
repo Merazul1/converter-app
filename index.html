@@ -36,22 +36,32 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%232563eb'/><text x='50%' y='55%' font-size='50' font-weight='bold' text-anchor='middle' dominant-baseline='middle' fill='white'>$</text></svg>" />
 
-    <!-- JSON-LD Structured Data for Google Rich Snippets -->
+    <!-- JSON-LD Structured Data for Google Rich Snippets & AI Readability -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "CurrenFlow Currency Converter",
-      "url": "https://www.currenflow.com/",
-      "description": "Free online live currency converter tool calculating real-time exchange rates for 160+ world currencies.",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "CurrenFlow",
+        "url": "https://www.currenflow.com/",
+        "logo": "https://www.currenflow.com/og-image.png",
+        "description": "Real-time foreign exchange rate converter and international financial calculation platform."
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "CurrenFlow Currency Converter",
+        "url": "https://www.currenflow.com/",
+        "description": "Free online live currency converter tool calculating real-time exchange rates for 160+ world currencies.",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
       }
-    }
+    ]
     </script>
 
     <!-- Google AdSense Verification & Auto Ads Tag -->
@@ -89,23 +99,37 @@
         <section style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 48px;">
           <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 16px;">Popular Currency Conversion Rates (Updated Today)</h2>
           <p style="color: #64748b; margin-bottom: 24px;">Explore live mid-market conversion baselines for world reserve currencies:</p>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-              <strong>USD to EUR</strong>: <a href="/usd-to-eur" style="color: #2563eb;">US Dollar to Euro</a>
-              <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Live European FX rate</div>
-            </div>
-            <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-              <strong>USD to GBP</strong>: <a href="/usd-to-gbp" style="color: #2563eb;">US Dollar to British Pound</a>
-              <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Live UK FX rate</div>
-            </div>
-            <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-              <strong>USD to INR</strong>: <a href="/usd-to-inr" style="color: #2563eb;">US Dollar to Indian Rupee</a>
-              <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Live Indian FX rate</div>
-            </div>
-            <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-              <strong>USD to CAD</strong>: <a href="/usd-to-cad" style="color: #2563eb;">US Dollar to Canadian Dollar</a>
-              <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Live Canadian FX rate</div>
-            </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-eur" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to EUR</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Euro</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/eur-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">EUR to USD</a> <div style="font-size: 12px; color: #64748b;">Euro to US Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-gbp" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to GBP</a> <div style="font-size: 12px; color: #64748b;">US Dollar to British Pound</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/gbp-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">GBP to USD</a> <div style="font-size: 12px; color: #64748b;">British Pound to US Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-inr" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to INR</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Indian Rupee</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-bdt" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to BDT</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Bangladeshi Taka</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-cad" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to CAD</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Canadian Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/cad-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">CAD to USD</a> <div style="font-size: 12px; color: #64748b;">Canadian Dollar to US Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-aud" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to AUD</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Australian Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/aud-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">AUD to USD</a> <div style="font-size: 12px; color: #64748b;">Australian Dollar to US Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-jpy" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to JPY</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Japanese Yen</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/jpy-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">JPY to USD</a> <div style="font-size: 12px; color: #64748b;">Japanese Yen to US Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-aed" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to AED</a> <div style="font-size: 12px; color: #64748b;">US Dollar to UAE Dirham</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/aed-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">AED to USD</a> <div style="font-size: 12px; color: #64748b;">UAE Dirham to US Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-sar" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to SAR</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Saudi Riyal</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/sar-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">SAR to USD</a> <div style="font-size: 12px; color: #64748b;">Saudi Riyal to US Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-cny" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to CNY</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Chinese Yuan</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/cny-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">CNY to USD</a> <div style="font-size: 12px; color: #64748b;">Chinese Yuan to US Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-pkr" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to PKR</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Pakistani Rupee</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-sgd" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to SGD</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Singapore Dollar</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-chf" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to CHF</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Swiss Franc</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/eur-to-gbp" style="color: #2563eb; font-weight: 600; text-decoration: none;">EUR to GBP</a> <div style="font-size: 12px; color: #64748b;">Euro to British Pound</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/gbp-to-eur" style="color: #2563eb; font-weight: 600; text-decoration: none;">GBP to EUR</a> <div style="font-size: 12px; color: #64748b;">British Pound to Euro</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/eur-to-chf" style="color: #2563eb; font-weight: 600; text-decoration: none;">EUR to CHF</a> <div style="font-size: 12px; color: #64748b;">Euro to Swiss Franc</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-brl" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to BRL</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Brazilian Real</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-mxn" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to MXN</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Mexican Peso</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-krw" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to KRW</a> <div style="font-size: 12px; color: #64748b;">US Dollar to South Korean Won</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-try" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to TRY</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Turkish Lira</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/usd-to-btc" style="color: #2563eb; font-weight: 600; text-decoration: none;">USD to BTC</a> <div style="font-size: 12px; color: #64748b;">US Dollar to Bitcoin</div></div>
+            <div style="padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;"><a href="/btc-to-usd" style="color: #2563eb; font-weight: 600; text-decoration: none;">BTC to USD</a> <div style="font-size: 12px; color: #64748b;">Bitcoin to US Dollar</div></div>
           </div>
         </section>
 
