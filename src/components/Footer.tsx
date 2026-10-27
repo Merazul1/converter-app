@@ -1,23 +1,30 @@
 import React from 'react';
-import { Coins, Heart } from 'lucide-react';
+import { Coins, BookOpen } from 'lucide-react';
 import { POPULAR_PAIRS } from '../data/currencies';
+import { GUIDES } from '../data/guidesData';
 import type { LegalTab } from './LegalModal';
 
 interface FooterProps {
   onSelectPair: (from: string, to: string) => void;
   onOpenLegal: (tab: LegalTab) => void;
+  onOpenAbout?: () => void;
+  onOpenGuides?: () => void;
+  onSelectGuide?: (slug: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onSelectPair,
   onOpenLegal,
+  onOpenAbout,
+  onOpenGuides,
+  onSelectGuide,
 }) => {
   return (
     <footer className="bg-slate-900 text-slate-400 pt-16 pb-12 mt-20 border-t border-slate-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
-          {/* Brand Info */}
-          <div className="md:col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-slate-800">
+          {/* Brand Info (col-span-3) */}
+          <div className="md:col-span-3">
             <a href="https://www.currenflow.com/" className="flex items-center gap-2 mb-4 group cursor-pointer inline-flex" title="CurrenFlow">
               <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
                 <Coins size={18} />
@@ -30,17 +37,17 @@ export const Footer: React.FC<FooterProps> = ({
               Fast, free, and accurate currency converter with real-time mid-market exchange rates for global commerce, travel, and financial planning.
             </p>
             <div className="text-[11px] text-slate-500">
-              Built with precision for 95+ Core Web Vitals speed.
+              Zero retail bank markups • Verified interbank feeds.
             </div>
           </div>
 
-          {/* Popular Pairs Links (SEO booster - all internal crawlable anchors) */}
-          <div className="md:col-span-2">
+          {/* Popular Pairs Links (col-span-5) */}
+          <div className="md:col-span-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
               Popular Currency Pairs (Live Rates)
             </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {POPULAR_PAIRS.map((pair) => {
+            <div className="grid grid-cols-2 gap-2">
+              {POPULAR_PAIRS.slice(0, 14).map((pair) => {
                 const path = `/${pair.from.toLowerCase()}-to-${pair.to.toLowerCase()}`;
                 return (
                   <a
@@ -61,12 +68,69 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
           </div>
 
-          {/* Compliance & Legal Links */}
-          <div className="md:col-span-1">
+          {/* Educational Guides (col-span-3) */}
+          <div className="md:col-span-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 flex items-center gap-1.5">
+              <BookOpen size={13} className="text-blue-400" /> Forex &amp; Fee Guides
+            </h4>
+            <ul className="space-y-2 text-xs">
+              {GUIDES.map((g) => (
+                <li key={g.id}>
+                  <a
+                    href={`/guides/${g.slug}`}
+                    onClick={(e) => {
+                      if (onSelectGuide) {
+                        e.preventDefault();
+                        onSelectGuide(g.slug);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="text-slate-400 hover:text-blue-400 transition-colors line-clamp-1"
+                    title={g.title}
+                  >
+                    {g.title}
+                  </a>
+                </li>
+              ))}
+              <li className="pt-1">
+                <a
+                  href="/guides"
+                  onClick={(e) => {
+                    if (onOpenGuides) {
+                      e.preventDefault();
+                      onOpenGuides();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
+                  className="text-xs font-bold text-blue-400 hover:underline inline-flex items-center gap-1"
+                >
+                  View All Guides &rarr;
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Compliance & Company (col-span-2) */}
+          <div className="md:col-span-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Legal &amp; Compliance
+              Company &amp; Legal
             </h4>
             <ul className="space-y-2 text-xs mb-4">
+              <li>
+                <a
+                  href="/about"
+                  onClick={(e) => {
+                    if (onOpenAbout) {
+                      e.preventDefault();
+                      onOpenAbout();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
+                  className="text-slate-400 hover:text-white transition-colors"
+                >
+                  About Us &amp; Methodology
+                </a>
+              </li>
               <li>
                 <a
                   href="/privacy-policy.html"
@@ -104,9 +168,6 @@ export const Footer: React.FC<FooterProps> = ({
                 </a>
               </li>
             </ul>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
-              Exchange rate figures are sourced from central and interbank feeds for informational purposes only.
-            </p>
           </div>
         </div>
 
@@ -114,6 +175,32 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} CurrenFlow (currenflow.com). All rights reserved.</p>
           <div className="flex items-center gap-4">
+            <a
+              href="/about"
+              onClick={(e) => {
+                if (onOpenAbout) {
+                  e.preventDefault();
+                  onOpenAbout();
+                }
+              }}
+              className="hover:text-slate-400 transition-colors"
+            >
+              About
+            </a>
+            <span>•</span>
+            <a
+              href="/guides"
+              onClick={(e) => {
+                if (onOpenGuides) {
+                  e.preventDefault();
+                  onOpenGuides();
+                }
+              }}
+              className="hover:text-slate-400 transition-colors"
+            >
+              Guides
+            </a>
+            <span>•</span>
             <a
               href="/privacy-policy.html"
               onClick={(e) => {
@@ -146,10 +233,6 @@ export const Footer: React.FC<FooterProps> = ({
             >
               Contact
             </a>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              Made for users <Heart size={12} className="text-rose-500 fill-rose-500" />
-            </span>
           </div>
         </div>
       </div>

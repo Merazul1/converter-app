@@ -3,6 +3,7 @@ import { Navbar } from './components/Navbar';
 import { ConverterCard } from './components/ConverterCard';
 import { AffiliateBanner } from './components/AffiliateBanner';
 import { ConversionTable } from './components/ConversionTable';
+import { PairInsightSection } from './components/PairInsightSection';
 import { CurrencyMatrix } from './components/CurrencyMatrix';
 import { SeoContent } from './components/SeoContent';
 import { FaqSection } from './components/FaqSection';
@@ -10,11 +11,17 @@ import { AdPlaceholder } from './components/AdPlaceholder';
 import { EmbedModal } from './components/EmbedModal';
 import { LegalModal, type LegalTab } from './components/LegalModal';
 import { LegalPage } from './components/LegalPage';
+import { AboutPage } from './components/AboutPage';
+import { GuidesHubPage } from './components/GuidesHubPage';
+import { GuideArticlePage } from './components/GuideArticlePage';
 import { Footer } from './components/Footer';
 import type { RatesData } from './types/currency';
 import { fetchExchangeRates, convertCurrency } from './services/currencyService';
 import { CURRENCIES, POPULAR_PAIRS } from './data/currencies';
+import { GUIDES } from './data/guidesData';
 import { TrendingUp, ShieldCheck } from 'lucide-react';
+
+type PageViewType = 'home' | 'privacy' | 'terms' | 'contact' | 'about' | 'guides' | 'guide-detail';
 
 export function App() {
   const [ratesData, setRatesData] = useState<RatesData | null>(null);
@@ -26,7 +33,8 @@ export function App() {
   const [isEmbedMode, setIsEmbedMode] = useState(false);
   const [isLegalOpen, setIsLegalOpen] = useState(false);
   const [activeLegalTab, setActiveLegalTab] = useState<LegalTab>('privacy');
-  const [pageView, setPageView] = useState<'home' | 'privacy' | 'terms' | 'contact'>('home');
+  const [pageView, setPageView] = useState<PageViewType>('home');
+  const [activeGuideSlug, setActiveGuideSlug] = useState<string | null>(null);
 
   // Change currency pair and update URL without full page reload
   const updatePair = useCallback((from: string, to: string) => {
@@ -38,59 +46,105 @@ export function App() {
       if (window.location.pathname !== newPath) {
         window.history.pushState({ from, to }, '', newPath);
       }
+      window.scrollTo(0, 0);
     }
   }, []);
 
-  // Parse path or query params on initial load
+  const navigateTo = useCallback((path: string, view: PageViewType) => {
+    setPageView(view);
+    if (typeof window !== 'undefined') {
+      if (window.location.pathname !== path) {
+        window.history.pushState(null, '', path);
+      }
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
+  const navigateToGuide = useCallback((slug: string) => {
+    setActiveGuideSlug(slug);
+    setPageView('guide-detail');
+    if (typeof window !== 'undefined') {
+      const path = `/guides/${slug}`;
+      if (window.location.pathname !== path) {
+        window.history.pushState(null, '', path);
+      }
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
+  // Parse path or query params on initial load and popstate
+  const parseLocation = useCallback(() => {
+    const rawPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+
+    // 1. Legal paths: /privacy-policy, /terms-of-service, /contact
+    if (rawPath === '/privacy-policy' || rawPath === '/privacy-policy.html') {
+      setPageView('privacy');
+      return;
+    }
+    if (rawPath === '/terms-of-service' || rawPath === '/terms-of-service.html') {
+      setPageView('terms');
+      return;
+    }
+    if (rawPath === '/contact' || rawPath === '/contact.html') {
+      setPageView('contact');
+      return;
+    }
+
+    // 2. About Us & Methodology
+    if (rawPath === '/about' || rawPath === '/about.html') {
+      setPageView('about');
+      return;
+    }
+
+    // 3. Guides Hub
+    if (rawPath === '/guides' || rawPath === '/guides.html') {
+      setPageView('guides');
+      return;
+    }
+
+    // 4. Guide Detail /guides/:slug
+    const guideMatch = rawPath.match(/^\/guides\/([a-z0-9-]+)(\.html)?$/i);
+    if (guideMatch) {
+      const slug = guideMatch[1];
+      const found = GUIDES.find((g) => g.slug === slug);
+      if (found) {
+        setActiveGuideSlug(found.slug);
+        setPageView('guide-detail');
+        return;
+      }
+    }
+
+    // 5. Check currency pair pathname: e.g. /usd-to-eur
+    const pathMatch = rawPath.match(/\/([a-z]{3})-to-([a-z]{3})/i);
+    if (pathMatch) {
+      const from = pathMatch[1].toUpperCase();
+      const to = pathMatch[2].toUpperCase();
+      if (CURRENCIES.some((c) => c.code === from) && CURRENCIES.some((c) => c.code === to)) {
+        setFromCurrency(from);
+        setToCurrency(to);
+        setPageView('home');
+        return;
+      }
+    }
+
+    // 6. Fallback to query params: ?from=USD&to=EUR
+    setPageView('home');
+    const params = new URLSearchParams(window.location.search);
+    const urlFrom = params.get('from');
+    const urlTo = params.get('to');
+    const urlAmount = params.get('amount');
+    const urlEmbed = params.get('embed');
+
+    if (urlFrom) setFromCurrency(urlFrom.toUpperCase());
+    if (urlTo) setToCurrency(urlTo.toUpperCase());
+    if (urlAmount && !isNaN(parseFloat(urlAmount))) setAmount(parseFloat(urlAmount));
+    if (urlEmbed === 'true') setIsEmbedMode(true);
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Ensure English LTR on document root
       document.documentElement.lang = 'en';
       document.documentElement.dir = 'ltr';
-
-      const parseLocation = () => {
-        const rawPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-
-        // 1. Check legal paths: /privacy-policy, /terms-of-service, /contact
-        if (rawPath === '/privacy-policy') {
-          setPageView('privacy');
-          return;
-        }
-        if (rawPath === '/terms-of-service') {
-          setPageView('terms');
-          return;
-        }
-        if (rawPath === '/contact') {
-          setPageView('contact');
-          return;
-        }
-
-        setPageView('home');
-
-        // 2. Check currency pair pathname: e.g. /usd-to-eur
-        const pathMatch = rawPath.match(/\/([a-z]{3})-to-([a-z]{3})/i);
-        if (pathMatch) {
-          const from = pathMatch[1].toUpperCase();
-          const to = pathMatch[2].toUpperCase();
-          if (CURRENCIES.some((c) => c.code === from) && CURRENCIES.some((c) => c.code === to)) {
-            setFromCurrency(from);
-            setToCurrency(to);
-            return;
-          }
-        }
-
-        // 3. Fallback to query params: ?from=USD&to=EUR
-        const params = new URLSearchParams(window.location.search);
-        const urlFrom = params.get('from');
-        const urlTo = params.get('to');
-        const urlAmount = params.get('amount');
-        const urlEmbed = params.get('embed');
-
-        if (urlFrom) setFromCurrency(urlFrom.toUpperCase());
-        if (urlTo) setToCurrency(urlTo.toUpperCase());
-        if (urlAmount && !isNaN(parseFloat(urlAmount))) setAmount(parseFloat(urlAmount));
-        if (urlEmbed === 'true') setIsEmbedMode(true);
-      };
 
       parseLocation();
 
@@ -98,9 +152,9 @@ export function App() {
       window.addEventListener('popstate', handlePopState);
       return () => window.removeEventListener('popstate', handlePopState);
     }
-  }, []);
+  }, [parseLocation]);
 
-  // Dynamic SEO Title, Description, and Canonical updates
+  // Dynamic SEO Title, Description, and Canonical updates for Home & Pair views
   useEffect(() => {
     if (typeof window !== 'undefined' && pageView === 'home') {
       const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
@@ -164,17 +218,60 @@ export function App() {
   const rates = ratesData?.rates || {};
   const { rate, inverseRate } = convertCurrency(1, fromCurrency, toCurrency, rates);
 
-  // If on a dedicated legal page route (/privacy-policy, /terms-of-service, /contact)
-  if (pageView !== 'home') {
+  const handleOpenLegal = (tab: LegalTab) => {
+    setPageView(tab);
+    if (typeof window !== 'undefined') {
+      const path = tab === 'privacy' ? '/privacy-policy' : tab === 'terms' ? '/terms-of-service' : '/contact';
+      window.history.pushState(null, '', path);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  // Dedicated routes:
+  if (pageView === 'privacy' || pageView === 'terms' || pageView === 'contact') {
     return (
       <LegalPage
         type={pageView}
-        onBackToHome={() => {
-          setPageView('home');
-          if (typeof window !== 'undefined') {
-            window.history.pushState(null, '', '/');
-          }
-        }}
+        onBackToHome={() => navigateTo('/', 'home')}
+      />
+    );
+  }
+
+  if (pageView === 'about') {
+    return (
+      <AboutPage
+        onBackToHome={() => navigateTo('/', 'home')}
+        onOpenGuides={() => navigateTo('/guides', 'guides')}
+        onOpenLegal={handleOpenLegal}
+        onSelectPair={(from, to) => updatePair(from, to)}
+        onSelectGuide={navigateToGuide}
+      />
+    );
+  }
+
+  if (pageView === 'guides') {
+    return (
+      <GuidesHubPage
+        onBackToHome={() => navigateTo('/', 'home')}
+        onSelectGuide={navigateToGuide}
+        onOpenAbout={() => navigateTo('/about', 'about')}
+        onOpenLegal={handleOpenLegal}
+        onSelectPair={(from, to) => updatePair(from, to)}
+      />
+    );
+  }
+
+  if (pageView === 'guide-detail') {
+    const currentArticle = GUIDES.find((g) => g.slug === activeGuideSlug) || GUIDES[0];
+    return (
+      <GuideArticlePage
+        article={currentArticle}
+        onBackToGuides={() => navigateTo('/guides', 'guides')}
+        onBackToHome={() => navigateTo('/', 'home')}
+        onSelectGuide={navigateToGuide}
+        onOpenAbout={() => navigateTo('/about', 'about')}
+        onOpenLegal={handleOpenLegal}
+        onSelectPair={(from, to) => updatePair(from, to)}
       />
     );
   }
@@ -203,19 +300,14 @@ export function App() {
   const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
   const toObj = CURRENCIES.find((c) => c.code === toCurrency);
 
-  const handleOpenLegal = (tab: LegalTab) => {
-    setPageView(tab);
-    if (typeof window !== 'undefined') {
-      const path = tab === 'privacy' ? '/privacy-policy' : tab === 'terms' ? '/terms-of-service' : '/contact';
-      window.history.pushState(null, '', path);
-      window.scrollTo(0, 0);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       {/* Top Navbar */}
-      <Navbar onOpenEmbed={() => setIsEmbedModalOpen(true)} />
+      <Navbar
+        onOpenHome={() => navigateTo('/', 'home')}
+        onOpenGuides={() => navigateTo('/guides', 'guides')}
+        onOpenAbout={() => navigateTo('/about', 'about')}
+      />
 
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-8 pb-16">
@@ -285,6 +377,15 @@ export function App() {
             inverseRate={inverseRate}
           />
 
+          {/* Currency Pair Editorial Insight & Fee Analysis */}
+          <PairInsightSection
+            fromCurrency={fromCurrency}
+            toCurrency={toCurrency}
+            fromName={fromObj?.name || fromCurrency}
+            toName={toObj?.name || toCurrency}
+            rate={rate}
+          />
+
           <CurrencyMatrix
             baseCurrency={fromCurrency}
             rates={rates}
@@ -334,6 +435,9 @@ export function App() {
       <Footer
         onSelectPair={(from, to) => updatePair(from, to)}
         onOpenLegal={handleOpenLegal}
+        onOpenAbout={() => navigateTo('/about', 'about')}
+        onOpenGuides={() => navigateTo('/guides', 'guides')}
+        onSelectGuide={navigateToGuide}
       />
     </div>
   );

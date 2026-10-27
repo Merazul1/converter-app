@@ -14,6 +14,21 @@ if (!fs.existsSync(indexHtmlPath)) {
 
 const baseHtml = fs.readFileSync(indexHtmlPath, 'utf8');
 
+function renderPage(pageUrl, title, description) {
+  let html = baseHtml;
+  html = html.replace(/<title>.*?<\/title>/i, `<title>${title}</title>`);
+  html = html.replace(/<meta name="title" content=".*?" \/>/i, `<meta name="title" content="${title}" />`);
+  html = html.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${description}" />`);
+  html = html.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${pageUrl}" />`);
+  html = html.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${pageUrl}" />`);
+  html = html.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${title}" />`);
+  html = html.replace(/<meta property="og:description" content=".*?" \/>/i, `<meta property="og:description" content="${description}" />`);
+  html = html.replace(/<meta property="twitter:url" content=".*?" \/>/i, `<meta property="twitter:url" content="${pageUrl}" />`);
+  html = html.replace(/<meta property="twitter:title" content=".*?" \/>/i, `<meta property="twitter:title" content="${title}" />`);
+  html = html.replace(/<meta property="twitter:description" content=".*?" \/>/i, `<meta property="twitter:description" content="${description}" />`);
+  return html;
+}
+
 const CURRENCY_NAMES = {
   USD: 'US Dollar',
   EUR: 'Euro',
@@ -84,59 +99,8 @@ for (const pair of POPULAR_PAIRS) {
   const pageTitle = `${pair.from} to ${pair.to}: Live Mid-Market Exchange Rate (0% Bank Fees) | CurrenFlow`;
   const pageDesc = `Convert ${pair.from} (${fromName}) to ${pair.to} (${toName}) at live mid-market rates (0% bank fees). Check real-time exchange tables and calculate conversions on CurrenFlow.`;
 
-  let pairHtml = baseHtml;
+  const pairHtml = renderPage(pairUrl, pageTitle, pageDesc);
 
-  // Replace Title & Meta Title
-  pairHtml = pairHtml.replace(
-    /<title>.*?<\/title>/i,
-    `<title>${pageTitle}</title>`
-  );
-  pairHtml = pairHtml.replace(
-    /<meta name="title" content=".*?" \/>/i,
-    `<meta name="title" content="${pageTitle}" />`
-  );
-
-  // Replace Description
-  pairHtml = pairHtml.replace(
-    /<meta name="description" content=".*?" \/>/i,
-    `<meta name="description" content="${pageDesc}" />`
-  );
-
-  // Replace Canonical Link (CRITICAL: self-canonical)
-  pairHtml = pairHtml.replace(
-    /<link rel="canonical" href=".*?" \/>/i,
-    `<link rel="canonical" href="${pairUrl}" />`
-  );
-
-  // Replace Open Graph / Facebook tags
-  pairHtml = pairHtml.replace(
-    /<meta property="og:url" content=".*?" \/>/i,
-    `<meta property="og:url" content="${pairUrl}" />`
-  );
-  pairHtml = pairHtml.replace(
-    /<meta property="og:title" content=".*?" \/>/i,
-    `<meta property="og:title" content="${pageTitle}" />`
-  );
-  pairHtml = pairHtml.replace(
-    /<meta property="og:description" content=".*?" \/>/i,
-    `<meta property="og:description" content="${pageDesc}" />`
-  );
-
-  // Replace Twitter tags
-  pairHtml = pairHtml.replace(
-    /<meta property="twitter:url" content=".*?" \/>/i,
-    `<meta property="twitter:url" content="${pairUrl}" />`
-  );
-  pairHtml = pairHtml.replace(
-    /<meta property="twitter:title" content=".*?" \/>/i,
-    `<meta property="twitter:title" content="${pageTitle}" />`
-  );
-  pairHtml = pairHtml.replace(
-    /<meta property="twitter:description" content=".*?" \/>/i,
-    `<meta property="twitter:description" content="${pageDesc}" />`
-  );
-
-  // Write to dist/${slug}/index.html
   const pairDir = path.join(distDir, slug);
   if (!fs.existsSync(pairDir)) {
     fs.mkdirSync(pairDir, { recursive: true });
@@ -144,4 +108,80 @@ for (const pair of POPULAR_PAIRS) {
   fs.writeFileSync(path.join(pairDir, 'index.html'), pairHtml, 'utf8');
 }
 
-console.log(`✓ Successfully pre-rendered all ${POPULAR_PAIRS.length} currency pair pages with self-canonical tags!`);
+console.log(`✓ Pre-rendered all ${POPULAR_PAIRS.length} currency pair pages.`);
+
+// 2. Pre-render About Us Page
+console.log('Pre-rendering /about page...');
+const aboutUrl = 'https://www.currenflow.com/about';
+const aboutTitle = 'About Us & Data Methodology - CurrenFlow';
+const aboutDesc = 'Learn about CurrenFlow’s mission to provide 100% transparent mid-market exchange rates, our central bank data aggregation methodology, and editorial standards.';
+const aboutHtml = renderPage(aboutUrl, aboutTitle, aboutDesc);
+
+const aboutDir = path.join(distDir, 'about');
+if (!fs.existsSync(aboutDir)) {
+  fs.mkdirSync(aboutDir, { recursive: true });
+}
+fs.writeFileSync(path.join(aboutDir, 'index.html'), aboutHtml, 'utf8');
+fs.writeFileSync(path.join(distDir, 'about.html'), aboutHtml, 'utf8');
+console.log('✓ Pre-rendered /about and about.html');
+
+// 3. Pre-render Guides Knowledge Base Hub Page
+console.log('Pre-rendering /guides hub page...');
+const guidesUrl = 'https://www.currenflow.com/guides';
+const guidesTitle = 'Currency & Forex Guides - CurrenFlow Knowledge Base';
+const guidesDesc = 'Explore comprehensive guides on foreign exchange rates, avoiding hidden commercial bank fees, understanding central bank policies, and saving on overseas transfers.';
+const guidesHtml = renderPage(guidesUrl, guidesTitle, guidesDesc);
+
+const guidesDir = path.join(distDir, 'guides');
+if (!fs.existsSync(guidesDir)) {
+  fs.mkdirSync(guidesDir, { recursive: true });
+}
+fs.writeFileSync(path.join(guidesDir, 'index.html'), guidesHtml, 'utf8');
+fs.writeFileSync(path.join(distDir, 'guides.html'), guidesHtml, 'utf8');
+console.log('✓ Pre-rendered /guides and guides.html');
+
+// 4. Pre-render 5 In-Depth Financial Guide Articles
+const GUIDES = [
+  {
+    slug: 'hidden-bank-exchange-rate-fees',
+    title: 'The Hidden Cost of Foreign Exchange: How Commercial Banks Charge 3%–5% in Secret Markups',
+    summary: 'Discover how traditional banks inflate retail exchange rates beyond the mid-market rate and learn actionable strategies to eliminate unnecessary foreign transaction fees.'
+  },
+  {
+    slug: 'mid-market-vs-retail-exchange-rates',
+    title: 'Mid-Market vs. Retail Exchange Rates: A Complete Beginner’s Guide',
+    summary: 'Understand the difference between the true interbank exchange rate and the retail rates quoted by banks, airport kiosks, and credit cards.'
+  },
+  {
+    slug: 'how-central-banks-impact-forex',
+    title: 'How Central Banks Influence Everyday Exchange Rates (Fed, ECB, BoE, RBI)',
+    summary: 'A clear explanation of how interest rate hikes, inflation targeting, and quantitative easing directly affect foreign exchange rates and your purchasing power.'
+  },
+  {
+    slug: 'international-money-transfer-mistakes',
+    title: 'Top 7 Costly Mistakes When Transferring Money Abroad',
+    summary: 'Avoid expensive hidden currency conversion fees, SWIFT intermediary deductions, and poor transfer timing with these practical expert recommendations.'
+  },
+  {
+    slug: 'understanding-currency-pairs-forex-spreads',
+    title: 'Understanding Currency Pairs, Forex Spreads, and Pips',
+    summary: 'Learn the foundational mechanics of base and quote currencies, bid-ask spreads, and pip valuations in global foreign currency markets.'
+  }
+];
+
+console.log(`Pre-rendering ${GUIDES.length} financial guide articles...`);
+
+for (const guide of GUIDES) {
+  const guideUrl = `https://www.currenflow.com/guides/${guide.slug}`;
+  const guideTitle = `${guide.title} | CurrenFlow Guides`;
+  const guideArticleHtml = renderPage(guideUrl, guideTitle, guide.summary);
+
+  const guideArticleDir = path.join(distDir, 'guides', guide.slug);
+  if (!fs.existsSync(guideArticleDir)) {
+    fs.mkdirSync(guideArticleDir, { recursive: true });
+  }
+  fs.writeFileSync(path.join(guideArticleDir, 'index.html'), guideArticleHtml, 'utf8');
+}
+
+console.log(`✓ Successfully pre-rendered all ${GUIDES.length} guide articles!`);
+console.log('All static pages generated with perfect self-canonical tags.');
