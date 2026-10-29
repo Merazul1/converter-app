@@ -29,32 +29,6 @@ function renderPage(pageUrl, title, description) {
   return html;
 }
 
-const CURRENCY_NAMES = {
-  USD: 'US Dollar',
-  EUR: 'Euro',
-  GBP: 'British Pound',
-  JPY: 'Japanese Yen',
-  CAD: 'Canadian Dollar',
-  AUD: 'Australian Dollar',
-  CHF: 'Swiss Franc',
-  CNY: 'Chinese Yuan',
-  INR: 'Indian Rupee',
-  BDT: 'Bangladeshi Taka',
-  AED: 'UAE Dirham',
-  SAR: 'Saudi Riyal',
-  SGD: 'Singapore Dollar',
-  HKD: 'Hong Kong Dollar',
-  NZD: 'New Zealand Dollar',
-  MXN: 'Mexican Peso',
-  BRL: 'Brazilian Real',
-  ZAR: 'South African Rand',
-  TRY: 'Turkish Lira',
-  KRW: 'South Korean Won',
-  PKR: 'Pakistani Rupee',
-  BTC: 'Bitcoin',
-  ETH: 'Ethereum'
-};
-
 const POPULAR_PAIRS = [
   { from: 'USD', to: 'EUR' },
   { from: 'EUR', to: 'USD' },
@@ -93,11 +67,10 @@ console.log(`Pre-rendering ${POPULAR_PAIRS.length} popular currency pair pages..
 for (const pair of POPULAR_PAIRS) {
   const slug = `${pair.from.toLowerCase()}-to-${pair.to.toLowerCase()}`;
   const pairUrl = `https://www.currenflow.com/${slug}`;
-  const fromName = CURRENCY_NAMES[pair.from] || pair.from;
-  const toName = CURRENCY_NAMES[pair.to] || pair.to;
 
-  const pageTitle = `${pair.from} to ${pair.to}: Live Mid-Market Exchange Rate (0% Bank Fees) | CurrenFlow`;
-  const pageDesc = `Convert ${pair.from} (${fromName}) to ${pair.to} (${toName}) at live mid-market rates (0% bank fees). Check real-time exchange tables and calculate conversions on CurrenFlow.`;
+  // Under 60 chars title, under 150 chars description
+  const pageTitle = `${pair.from} to ${pair.to}: Live Rates (0% Bank Fees) | CurrenFlow`;
+  const pageDesc = `Convert ${pair.from} to ${pair.to} at live mid-market rates (0% bank fees). Real-time calculator and exchange charts on CurrenFlow.`;
 
   const pairHtml = renderPage(pairUrl, pageTitle, pageDesc);
 
@@ -110,11 +83,11 @@ for (const pair of POPULAR_PAIRS) {
 
 console.log(`✓ Pre-rendered all ${POPULAR_PAIRS.length} currency pair pages.`);
 
-// 2. Pre-render About Us Page
+// 2. Pre-render About Us Page (under 60 chars title, under 150 chars desc)
 console.log('Pre-rendering /about page...');
 const aboutUrl = 'https://www.currenflow.com/about';
-const aboutTitle = 'About Us & Data Methodology - CurrenFlow';
-const aboutDesc = 'Learn about CurrenFlow’s mission to provide 100% transparent mid-market exchange rates, our central bank data aggregation methodology, and editorial standards.';
+const aboutTitle = 'About Us & Methodology | CurrenFlow';
+const aboutDesc = 'CurrenFlow provides transparent mid-market exchange rates, central bank methodology, and consumer-first financial tools.';
 const aboutHtml = renderPage(aboutUrl, aboutTitle, aboutDesc);
 
 const aboutDir = path.join(distDir, 'about');
@@ -125,11 +98,11 @@ fs.writeFileSync(path.join(aboutDir, 'index.html'), aboutHtml, 'utf8');
 fs.writeFileSync(path.join(distDir, 'about.html'), aboutHtml, 'utf8');
 console.log('✓ Pre-rendered /about and about.html');
 
-// 3. Pre-render Guides Knowledge Base Hub Page
+// 3. Pre-render Guides Knowledge Base Hub Page (under 60 chars title, under 150 chars desc)
 console.log('Pre-rendering /guides hub page...');
 const guidesUrl = 'https://www.currenflow.com/guides';
-const guidesTitle = 'Currency & Forex Guides - CurrenFlow Knowledge Base';
-const guidesDesc = 'Explore comprehensive guides on foreign exchange rates, avoiding hidden commercial bank fees, understanding central bank policies, and saving on overseas transfers.';
+const guidesTitle = 'Forex & Currency Transfer Guides | CurrenFlow';
+const guidesDesc = 'Expert foreign exchange guides: avoid hidden commercial bank markups, understand central bank rates, and save on global transfers.';
 const guidesHtml = renderPage(guidesUrl, guidesTitle, guidesDesc);
 
 const guidesDir = path.join(distDir, 'guides');
@@ -140,32 +113,32 @@ fs.writeFileSync(path.join(guidesDir, 'index.html'), guidesHtml, 'utf8');
 fs.writeFileSync(path.join(distDir, 'guides.html'), guidesHtml, 'utf8');
 console.log('✓ Pre-rendered /guides and guides.html');
 
-// 4. Pre-render 5 In-Depth Financial Guide Articles
+// 4. Pre-render 5 In-Depth Financial Guide Articles (all titles < 60 chars, descriptions < 150 chars)
 const GUIDES = [
   {
     slug: 'hidden-bank-exchange-rate-fees',
-    title: 'The Hidden Cost of Foreign Exchange: How Commercial Banks Charge 3%–5% in Secret Markups',
-    summary: 'Discover how traditional banks inflate retail exchange rates beyond the mid-market rate and learn actionable strategies to eliminate unnecessary foreign transaction fees.'
+    title: 'Hidden Bank Forex Fees: The 3%–5% Markup | CurrenFlow',
+    summary: 'How commercial banks charge 3%–5% in hidden exchange rate markups and practical strategies to eliminate foreign transaction fees on transfers.'
   },
   {
     slug: 'mid-market-vs-retail-exchange-rates',
-    title: 'Mid-Market vs. Retail Exchange Rates: A Complete Beginner’s Guide',
-    summary: 'Understand the difference between the true interbank exchange rate and the retail rates quoted by banks, airport kiosks, and credit cards.'
+    title: 'Mid-Market vs Retail Exchange Rates Guide | CurrenFlow',
+    summary: 'Understand the difference between the true mid-market exchange rate and retail markups quoted by banks, airport kiosks, and cards.'
   },
   {
     slug: 'how-central-banks-impact-forex',
-    title: 'How Central Banks Influence Everyday Exchange Rates (Fed, ECB, BoE, RBI)',
-    summary: 'A clear explanation of how interest rate hikes, inflation targeting, and quantitative easing directly affect foreign exchange rates and your purchasing power.'
+    title: 'How Central Banks Impact Exchange Rates | CurrenFlow',
+    summary: 'How central bank interest rate decisions (Fed, ECB, BoE, RBI) influence foreign exchange rates and your purchasing power.'
   },
   {
     slug: 'international-money-transfer-mistakes',
-    title: 'Top 7 Costly Mistakes When Transferring Money Abroad',
-    summary: 'Avoid expensive hidden currency conversion fees, SWIFT intermediary deductions, and poor transfer timing with these practical expert recommendations.'
+    title: '7 Costly Money Transfer Mistakes to Avoid | CurrenFlow',
+    summary: 'Avoid expensive hidden currency conversion fees, SWIFT intermediary deductions, and poor transfer timing with expert tips.'
   },
   {
     slug: 'understanding-currency-pairs-forex-spreads',
-    title: 'Understanding Currency Pairs, Forex Spreads, and Pips',
-    summary: 'Learn the foundational mechanics of base and quote currencies, bid-ask spreads, and pip valuations in global foreign currency markets.'
+    title: 'Currency Pairs, Forex Spreads & Pips | CurrenFlow',
+    summary: 'A clear guide to currency pair notation, base vs quote currencies, pips, and calculating real bid-ask forex spreads.'
   }
 ];
 
@@ -173,8 +146,7 @@ console.log(`Pre-rendering ${GUIDES.length} financial guide articles...`);
 
 for (const guide of GUIDES) {
   const guideUrl = `https://www.currenflow.com/guides/${guide.slug}`;
-  const guideTitle = `${guide.title} | CurrenFlow Guides`;
-  const guideArticleHtml = renderPage(guideUrl, guideTitle, guide.summary);
+  const guideArticleHtml = renderPage(guideUrl, guide.title, guide.summary);
 
   const guideArticleDir = path.join(distDir, 'guides', guide.slug);
   if (!fs.existsSync(guideArticleDir)) {
@@ -184,4 +156,4 @@ for (const guide of GUIDES) {
 }
 
 console.log(`✓ Successfully pre-rendered all ${GUIDES.length} guide articles!`);
-console.log('All static pages generated with perfect self-canonical tags.');
+console.log('All static pages generated with perfect self-canonical tags and optimal SEO lengths.');

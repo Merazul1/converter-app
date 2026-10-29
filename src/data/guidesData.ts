@@ -2,6 +2,7 @@ export interface GuideArticle {
   id: string;
   slug: string;
   title: string;
+  seoTitle?: string;
   subtitle: string;
   author: string;
   authorRole: string;
@@ -34,13 +35,14 @@ export const GUIDES: GuideArticle[] = [
     id: 'guide-1',
     slug: 'hidden-bank-exchange-rate-fees',
     title: 'The Hidden Cost of Foreign Exchange: How Commercial Banks Charge 3%–5% in Secret Markups',
+    seoTitle: 'Hidden Bank Forex Fees: The 3%–5% Markup',
     subtitle: 'Why "Zero Commission" international money transfers often cost hundreds of dollars in hidden exchange rate spreads.',
     author: 'CurrenFlow Research Team',
     authorRole: 'Forex Market & Fee Analysis',
     date: 'October 24, 2026',
     readTime: '6 min read',
     category: 'Banking Fees',
-    summary: 'Most traditional commercial banks advertise low or "zero" upfront wire fees, yet quietly extract 3% to 5% by manipulating the exchange rate away from the true interbank mid-market rate. Here is how the markup works and how to protect your money.',
+    summary: 'How commercial banks charge 3%–5% in hidden exchange rate markups and practical strategies to eliminate foreign transaction fees on transfers.',
     keyTakeaways: [
       'An advertised "0% commission" transfer usually hides a 2.5% to 5.0% markup added to the currency exchange rate.',
       'On a $5,000 transfer, a 4% bank markup quietly costs you $200 before the recipient even receives the funds.',
@@ -103,13 +105,14 @@ export const GUIDES: GuideArticle[] = [
     id: 'guide-2',
     slug: 'mid-market-vs-retail-exchange-rates',
     title: 'Mid-Market vs. Retail Exchange Rates: A Complete Beginner’s Guide',
+    seoTitle: 'Mid-Market vs Retail Exchange Rates Guide',
     subtitle: 'Learn what the interbank rate is, why it represents the true value of money, and how retail quotes differ.',
     author: 'CurrenFlow Research Team',
     authorRole: 'Global Macroeconomics & Forex',
     date: 'October 25, 2026',
     readTime: '5 min read',
     category: 'Forex Education',
-    summary: 'Discover the mechanics behind foreign exchange rates: what the mid-market rate is, how international banks trade currencies, and why retail customers are almost always quoted a skewed price.',
+    summary: 'Understand the difference between the true mid-market exchange rate and the retail markups quoted by banks, airport kiosks, and cards.',
     keyTakeaways: [
       'The mid-market rate (also called the interbank rate) is the midpoint between global buy (bid) and sell (ask) prices.',
       'It is the only unbiased, fair exchange rate, traded in multi-million dollar volumes between central and commercial banks.',
@@ -159,13 +162,14 @@ export const GUIDES: GuideArticle[] = [
     id: 'guide-3',
     slug: 'how-central-banks-impact-forex',
     title: 'How Central Banks Influence Everyday Exchange Rates (Fed, ECB, BoE, RBI)',
+    seoTitle: 'How Central Banks Impact Exchange Rates',
     subtitle: 'An accessible analysis of interest rates, monetary policy, and inflation, and how they dictate currency fluctuations.',
     author: 'CurrenFlow Research Team',
     authorRole: 'Economic Policy Analyst',
     date: 'October 25, 2026',
     readTime: '7 min read',
     category: 'Global Economy',
-    summary: 'Central bank policies dictate the rise and fall of national currencies. Learn how benchmark interest rates, inflation metrics, and quantitative policy shifts directly affect your personal international transfers.',
+    summary: 'How central bank interest rate decisions (Fed, ECB, BoE, RBI) influence foreign exchange rates and your purchasing power.',
     keyTakeaways: [
       'Higher benchmark interest rates attract foreign capital, generally strengthening a nation\'s currency.',
       'Inflation erodes purchasing power; when inflation is persistently high, a currency tends to depreciate over time.',
@@ -206,13 +210,14 @@ export const GUIDES: GuideArticle[] = [
     id: 'guide-4',
     slug: 'international-money-transfer-mistakes',
     title: 'Top 7 Costly Mistakes When Transferring Money Abroad (And How to Avoid Them)',
+    seoTitle: '7 Costly Money Transfer Mistakes to Avoid',
     subtitle: 'From ATM Dynamic Currency Conversion to weekend bank spreads, avoid the pitfalls that drain your funds.',
     author: 'CurrenFlow Research Team',
     authorRole: 'Consumer Financial Protection',
     date: 'October 26, 2026',
     readTime: '6 min read',
     category: 'Money Transfers',
-    summary: 'Avoid the most expensive foreign exchange blunders made by expats, remote workers, students, and travelers when sending money across borders.',
+    summary: 'Avoid expensive hidden currency conversion fees, SWIFT intermediary deductions, and poor transfer timing with expert tips.',
     keyTakeaways: [
       'Never accept "Dynamic Currency Conversion" (DCC) at overseas ATMs or card readers; always choose the local currency.',
       'Avoid converting large currency sums over the weekend when interbank markets are closed and retail spreads widen.',
@@ -255,13 +260,14 @@ export const GUIDES: GuideArticle[] = [
     id: 'guide-5',
     slug: 'understanding-currency-pairs-forex-spreads',
     title: 'Understanding Currency Pairs, Forex Spreads, and Pips: A Practical Reference',
+    seoTitle: 'Currency Pairs, Forex Spreads & Pips',
     subtitle: 'Demystifying the foundational terminology used in currency conversion and foreign exchange markets.',
     author: 'CurrenFlow Research Team',
     authorRole: 'Forex Fundamentals & Education',
     date: 'October 26, 2026',
     readTime: '5 min read',
     category: 'Forex Education',
-    summary: 'A clear, jargon-free guide to understanding currency pair notation, base vs. quote currencies, the role of pips, and how live mid-market rates are determined.',
+    summary: 'A clear guide to currency pair notation, base vs quote currencies, pips, and calculating real bid-ask forex spreads.',
     keyTakeaways: [
       'Currency pairs always display the Base Currency first, followed by the Quote Currency (e.g., EUR/USD).',
       'The quotation indicates exactly how much Quote Currency is required to purchase one single unit of Base Currency.',

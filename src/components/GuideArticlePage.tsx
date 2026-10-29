@@ -26,7 +26,7 @@ export const GuideArticlePage: React.FC<GuideArticlePageProps> = ({
 }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = `${article.title} | CurrenFlow Guides`;
+    document.title = `${article.seoTitle || article.title} | CurrenFlow`;
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute('content', article.summary);

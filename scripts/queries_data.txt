@@ -1,0 +1,238 @@
+exchange rate usd to eur,0,692,0,9.72
+dollar to euro,0,512,0,9.87
+dollar to euro converter,0,131,0,9.78
+usd to cad,0,66,0,81.12
+dollar to eur,0,60,0,10.67
+dolar tl çeviri,0,46,0,83.87
+us dollar to canadian,0,41,0,80.27
+euro to pounds,0,38,0,76.13
+usd to aud,0,37,0,67.46
+usd to pkr,0,36,0,80.06
+usd to inr,0,31,0,92.61
+euro to pound,0,30,0,74.73
+gbp to eur,0,28,0,82.25
+usd to eur,0,23,0,16
+euro to gbp,0,21,0,77.14
+usd to canadian,0,19,0,58.16
+euros to pounds,0,18,0,76.83
+gbp to euro,0,18,0,82.94
+eur to gbp,0,16,0,73.31
+convert euros to pounds,0,15,0,75.2
+dollar to inr,0,15,0,83.13
+usd to euro,0,14,0,23.29
+usd to gbp,0,14,0,73.71
+usd in cad,0,14,0,77.57
+dollar to pkr,0,14,0,77.93
+us dollar to australian dollar,0,13,0,67
+convert gbp to euro,0,13,0,81.23
+pounds to euro,0,12,0,84.42
+dollar to eu,0,10,0,7.5
+convert usd to cad,0,10,0,76.8
+usd to cdn,0,10,0,81.1
+convert pounds to euros,0,9,0,78
+usd to aus,0,8,0,71.62
+euro to british pound,0,8,0,76.12
+convert usd to inr,0,8,0,77.25
+dolar tl çevir,0,7,0,67.57
+pound to euro,0,7,0,73.14
+convert dollar to inr,0,7,0,73.43
+euro to pound sterling,0,7,0,73.43
+ドル 円換算,0,7,0,76.86
+exchange rates euro to pound,0,7,0,78.29
+dollar to pak rupee,0,7,0,79.86
+dolar hesaplama tl çevirme,0,7,0,80.71
+currency exchange euros to pounds,0,7,0,82.86
+dollar to euro calculator,0,6,0,37.17
+usd to euro calculator,0,6,0,38.67
+usd currency converter,0,6,0,51.33
+currency converter usd,0,6,0,60.83
+currency converter euro to pound,0,6,0,71.83
+currency euro to pound,0,6,0,73
+usd to eur account,0,6,0,73
+euro in gbp,0,6,0,74.67
+euro to uk pound,0,6,0,76.5
+exchange euro to pound,0,6,0,79.17
+exchange usd to cad,0,6,0,79.67
+us dollar to british pound,0,6,0,79.67
+gb pounds to euros,0,6,0,82
+convert euros,0,6,0,83.33
+dollar to rupee,0,6,0,84.83
+pounds to eur,0,6,0,84.83
+us to cad,0,5,0,59.4
+dollar to australian dollar,0,5,0,63.4
+usd in aud,0,5,0,64.2
+dollar to real,0,5,0,67.2
+convert to real,0,5,0,68.4
+euro to pound conversion,0,5,0,70.4
+para dönüştürme,0,5,0,71
+convert money to pounds,0,5,0,71.6
+convert us dollars to canadian,0,5,0,73.6
+exchange rate usd to cad,0,5,0,74.2
+euro currency converter,0,5,0,74.6
+euro in pounds,0,5,0,75.8
+dollar to british pound,0,5,0,76.8
+dollar to pound sterling,0,5,0,77.8
+dollar to canadian dollar,0,5,0,78.6
+eur in pounds,0,5,0,78.6
+dollars to pounds,0,5,0,79.4
+dollars to inr,0,5,0,80
+exchange euros to pounds,0,5,0,80
+euro to sterling,0,5,0,80.2
+british pound to euro,0,5,0,80.6
+american dollar to indian rupee,0,5,0,80.8
+converting us dollars to pounds,0,5,0,81.6
+online currency converter usd to inr,0,5,0,82
+convert euro,0,5,0,83.8
+exchange rate for euros to pounds,0,5,0,83.8
+usd to cas,0,5,0,85.8
+change dollars to pounds,0,5,0,86.4
+dollor to inr,0,5,0,88.2
+dollar to euro conversion rate,0,4,0,10.25
+تحويل دولار,0,4,0,39
+تحويل من دولار الى درهم,0,4,0,54.75
+dollar to euro conversion,0,4,0,56.75
+euros into pounds,0,4,0,58.25
+euro conversion calculator,0,4,0,61.25
+us dollar to euro calculator,0,4,0,63.25
+aed to usd conversion,0,4,0,66.75
+aed to usd currency conversion,0,4,0,67
+exchange usd to gbp,0,4,0,68.25
+euro converter calculator,0,4,0,68.5
+convert usd to eur,0,4,0,69
+dollar converter,0,4,0,69.5
+dollars to british pounds,0,4,0,71.75
+dollars to uk pounds,0,4,0,71.75
+eur in gbp,0,4,0,71.75
+euro to gbp pound,0,4,0,71.75
+euros into pounds sterling,0,4,0,72
+euros to british pounds,0,4,0,72.25
+us dollar to cad,0,4,0,72.25
+usd to pkr converter,0,4,0,72.25
+convert usd to gbp,0,4,0,73
+usd to cad converter,0,4,0,74.5
+dollar pound conversion,0,4,0,75
+euros to pounds sterling,0,4,0,75.5
+usd cad exchange rate calculator,0,4,0,75.75
+euro to british pounds,0,4,0,76
+rmb to usd,0,4,0,76.25
+euro to pound exchange rate,0,4,0,76.75
+euros in english pounds,0,4,0,76.75
+currency euro to gbp,0,4,0,77
+euro in pounds sterling,0,4,0,77
+euro in british pounds,0,4,0,77.25
+convert usd to cdn,0,4,0,78
+pounds to euro converter,0,4,0,78
+converting euros to pounds,0,4,0,78.5
+euro in uk pounds,0,4,0,78.75
+sterling to euro calculator,0,4,0,79.75
+currency converter usd to cad,0,4,0,80.75
+sterling to euro,0,4,0,80.75
+american dollar to indian rupees,0,4,0,81
+us dollar to canadian dollar,0,4,0,81
+pounds in euro,0,4,0,81.75
+تحويل عملات دولار الى ريال,0,4,0,83
+euro conversion rate,0,4,0,83.25
+us dollar to inr,0,4,0,83.25
+dollar exchange bd,0,4,0,85.25
+euros to pound,0,4,0,86.25
+convert american to canadian dollars,0,4,0,86.5
+gbp in euro,0,4,0,87.25
+dollar to bkash,0,4,0,87.75
+dolar türk lirası çevirme,0,4,0,89.25
+euros to sterling,0,4,0,89.75
+dolar to inr,0,4,0,90.25
+euro pound converter,0,4,0,90.75
+dolar hesaplama,0,4,0,91.5
+dollar to euro exchange rate,0,3,0,8
+dollar to.euro,0,3,0,9
+$ 円 換算,0,3,0,11
+currency converter usd to euro,0,3,0,14
+currency converter usd to eur,0,3,0,30
+us dollar to euro,0,3,0,44
+45 usd to aud,0,3,0,44.33
+dollar to pakistani rs,0,3,0,44.33
+499 us to aud,0,3,0,45.67
+usd conversion,0,3,0,49.67
+usd converter,0,3,0,59
+chinese yuan to usd,0,3,0,59.33
+us to cdn currency,0,3,0,59.33
+convert dollars,0,3,0,61
+us to cad dollar,0,3,0,63.67
+convert us dollars to australian dollars,0,3,0,64
+change euros to pounds,0,3,0,64.33
+currency exchange euro to pound,0,3,0,65
+dollar to aud,0,3,0,65
+convert aed to dollars,0,3,0,65.33
+convert dirham to usd,0,3,0,65.33
+dollar to pkr converter,0,3,0,65.67
+convert aed to usd,0,3,0,67.33
+convert usd to pkr,0,3,0,68
+dollar convert,0,3,0,68.67
+currency converter dollar to euro,0,3,0,69.67
+euro to calculator,0,3,0,70
+convert us dollar to pkr,0,3,0,70.67
+euro convert,0,3,0,70.67
+currency converter us dollar to pakistani rupees,0,3,0,71.33
+dollar conversion,0,3,0,72
+dollar to aed,0,3,0,72.33
+usd to british pounds,0,3,0,72.67
+conversion usd to pkr,0,3,0,73
+convert usd to pak rupees,0,3,0,73
+rmb to dollars,0,3,0,73.33
+usd to japanese yen,0,3,0,73.67
+convert dollar into pak rupees,0,3,0,74
+currency euros to pounds,0,3,0,74.33
+usd to british pound,0,3,0,74.33
+من دولار الى ريال,0,3,0,74.33
+usd to cad conversion,0,3,0,74.67
+conversion charges from usd to inr,0,3,0,75
+dollars to pounds uk,0,3,0,75
+euro to pounds sterling,0,3,0,75
+usd to tl,0,3,0,75
+dollar to pounds,0,3,0,75.33
+dollar to indian rupee,0,3,0,75.67
+dollars to pound sterling,0,3,0,76
+us to canadian dollar conversion,0,3,0,76
+تحويل من دولار الى ريال,0,3,0,76
+euros in british pounds,0,3,0,76.33
+united arab emirates dirham to dollar,0,3,0,76.33
+dollar to yen,0,3,0,76.67
+us dollar to canadian dollar conversion,0,3,0,76.67
+dollars to euros,0,3,0,77
+convert english pound to euro,0,3,0,77.33
+dollars to pounds sterling,0,3,0,77.33
+convert usd to pakistani rupees,0,3,0,77.67
+convert pounds to euro,0,3,0,79.67
+us dollar to indian rupee,0,3,0,79.67
+usd in inr,0,3,0,80
+conversion euro pound,0,3,0,80.33
+gbp into eur,0,3,0,80.33
+usd to can,0,3,0,80.33
+تحويل من دولار لريال,0,3,0,80.33
+تحويل من الدولار للريال,0,3,0,80.67
+doller to pkr,0,3,0,81
+exchange rate dollar to dirham,0,3,0,81.33
+convert yuan to usd,0,3,0,81.67
+1 chinese yuan to us dollar,0,3,0,82
+us dollar convert to indian rupees,0,3,0,82
+change euro to pound,0,3,0,82.67
+dollar to emirates dirham,0,3,0,83.33
+british pounds to euro,0,3,0,83.67
+pounds to euros,0,3,0,83.67
+usd to jpy,0,3,0,84
+usd to canadian dollar,0,3,0,84.67
+dollar to turkish lira,0,3,0,85.33
+gb pound to euro,0,3,0,85.33
+1 usd to inr,0,3,0,86
+dollar to pakistani rupee,0,3,0,86
+gbp in eur,0,3,0,87
+usd to indian rupee,0,3,0,88
+dolar tl çevirici,0,3,0,89.67
+usd to yen rate,0,3,0,90.33
+usd dollar in indian rupees,0,3,0,90.67
+us dollar to rupees,0,3,0,91
+dolar tl çevirme,0,3,0,92
+euro pond converter,0,3,0,93.33
+euro pound conversion,0,3,0,93.33
+euro pound,0,3,0,93.67
+cny to usd,0,3,0,94

@@ -85,7 +85,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onBackToHome }) => {
 
               <div className="space-y-6 text-sm sm:text-base">
                 <p>
-                  At <strong>CurrenFlow</strong> (accessible at <a href="https://currenflow.com" className="text-blue-600 font-semibold underline">https://currenflow.com</a>), your privacy is one of our primary priorities. This Privacy Policy document details the types of information recorded and collected by CurrenFlow and how we use it.
+                  At <strong>CurrenFlow</strong> (accessible at <a href="https://www.currenflow.com/" className="text-blue-600 font-semibold underline">https://www.currenflow.com/</a>), your privacy is one of our primary priorities. This Privacy Policy document details the types of information recorded and collected by CurrenFlow and how we use it.
                 </p>
 
                 <h2 className="text-xl font-bold text-slate-900 pt-4 border-t border-slate-100">
@@ -138,7 +138,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onBackToHome }) => {
 
               <div className="space-y-6 text-sm sm:text-base">
                 <p>
-                  By accessing or using <strong>CurrenFlow</strong> (<a href="https://currenflow.com" className="text-blue-600 font-semibold underline">https://currenflow.com</a>), you agree to comply with and be bound by the following Terms of Service.
+                  By accessing or using <strong>CurrenFlow</strong> (<a href="https://www.currenflow.com/" className="text-blue-600 font-semibold underline">https://www.currenflow.com/</a>), you agree to comply with and be bound by the following Terms of Service.
                 </p>
 
                 <h2 className="text-xl font-bold text-slate-900 pt-4 border-t border-slate-100">

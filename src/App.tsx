@@ -157,19 +157,14 @@ export function App() {
   // Dynamic SEO Title, Description, and Canonical updates for Home & Pair views
   useEffect(() => {
     if (typeof window !== 'undefined' && pageView === 'home') {
-      const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
-      const toObj = CURRENCIES.find((c) => c.code === toCurrency);
-      const fromName = fromObj?.name || fromCurrency;
-      const toName = toObj?.name || toCurrency;
-
       const isDefaultHome = fromCurrency === 'USD' && toCurrency === 'EUR' && window.location.pathname === '/';
       const pairSlug = isDefaultHome ? '' : `/${fromCurrency.toLowerCase()}-to-${toCurrency.toLowerCase()}`;
       const canonicalUrl = `https://www.currenflow.com${pairSlug || '/'}`;
 
       if (isDefaultHome) {
-        document.title = 'CurrenFlow: Live Currency Converter & Exchange Rates (0% Bank Fees)';
+        document.title = 'CurrenFlow: Live Currency Converter (0% Bank Fees)';
       } else {
-        document.title = `${fromCurrency} to ${toCurrency}: Live Mid-Market Exchange Rate (0% Bank Fees) | CurrenFlow`;
+        document.title = `${fromCurrency} to ${toCurrency}: Live Rates (0% Bank Fees) | CurrenFlow`;
       }
 
       const metaDesc = document.querySelector('meta[name="description"]');
@@ -177,12 +172,12 @@ export function App() {
         if (isDefaultHome) {
           metaDesc.setAttribute(
             'content',
-            'Convert 160+ currencies with real-time mid-market exchange rates today (0% bank fees). Free live currency converter calculator with zero hidden markups.'
+            'Convert 160+ world currencies at live mid-market exchange rates (0% bank fees). Instant currency converter with zero retail markups.'
           );
         } else {
           metaDesc.setAttribute(
             'content',
-            `Convert ${fromCurrency} (${fromName}) to ${toCurrency} (${toName}) at live mid-market rates (0% bank fees). Check real-time exchange tables and calculate conversions on CurrenFlow.`
+            `Convert ${fromCurrency} to ${toCurrency} at live mid-market rates (0% bank fees). Real-time calculator and exchange charts on CurrenFlow.`
           );
         }
       }

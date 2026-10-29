@@ -20,12 +20,12 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'About Us & Data Methodology - CurrenFlow';
+    document.title = 'About Us & Methodology | CurrenFlow';
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute(
         'content',
-        'Learn about CurrenFlow’s mission to provide 100% transparent mid-market exchange rates, our central bank data aggregation methodology, and editorial standards.'
+        'CurrenFlow provides transparent mid-market exchange rates, central bank methodology, and consumer-first financial tools.'
       );
     }
     const canonical = document.querySelector('link[rel="canonical"]');

@@ -21,12 +21,12 @@ export const GuidesHubPage: React.FC<GuidesHubPageProps> = ({
 }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Currency & Forex Guides - CurrenFlow Knowledge Base';
+    document.title = 'Forex & Currency Transfer Guides | CurrenFlow';
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute(
         'content',
-        'Explore comprehensive guides on foreign exchange rates, avoiding hidden commercial bank fees, understanding central bank policies, and saving on overseas transfers.'
+        'Expert foreign exchange guides: avoid hidden commercial bank markups, understand central bank rates, and save on global transfers.'
       );
     }
     const canonical = document.querySelector('link[rel="canonical"]');

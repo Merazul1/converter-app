@@ -80,7 +80,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
 
               <h4 className="font-bold text-slate-800 text-sm mt-3">1. Information We Collect</h4>
               <p>
-                CurrenFlow (accessible at <strong className="text-slate-900">https://currenflow.com</strong>) respects your privacy. We do not require visitors to register an account, and we never collect sensitive financial credentials, banking logins, or credit card numbers.
+                CurrenFlow (accessible at <strong className="text-slate-900">https://www.currenflow.com/</strong>) respects your privacy. We do not require visitors to register an account, and we never collect sensitive financial credentials, banking logins, or credit card numbers.
               </p>
 
               <h4 className="font-bold text-slate-800 text-sm mt-3">2. Cookies and Web Beacons</h4>
@@ -107,7 +107,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
 
               <h4 className="font-bold text-slate-800 text-sm mt-3">1. Acceptance of Terms</h4>
               <p>
-                By accessing or using CurrenFlow (<strong className="text-slate-900">https://currenflow.com</strong>), you agree to be bound by these Terms of Service. If you do not agree to all terms, please refrain from using the site.
+                By accessing or using CurrenFlow (<strong className="text-slate-900">https://www.currenflow.com/</strong>), you agree to be bound by these Terms of Service. If you do not agree to all terms, please refrain from using the site.
               </p>
 
               <h4 className="font-bold text-slate-800 text-sm mt-3">2. Informational Purpose Only</h4>
