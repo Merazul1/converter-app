@@ -162,7 +162,7 @@ export function App() {
       const canonicalUrl = `https://www.currenflow.com${pairSlug || '/'}`;
 
       if (isDefaultHome) {
-        document.title = 'CurrenFlow: Live Currency Converter (0% Bank Fees)';
+        document.title = 'CurrenFlow: Live Currency Converter';
       } else {
         document.title = `${fromCurrency} to ${toCurrency}: Live Rates (0% Bank Fees) | CurrenFlow`;
       }
