@@ -1,5 +1,5 @@
-import React from 'react';
-import { Landmark, TrendingUp, AlertCircle, ShieldCheck, Calculator, History, Globe2, ArrowRightLeft } from 'lucide-react';
+import React, { useState } from 'react';
+import { Landmark, TrendingUp, AlertCircle, ShieldCheck, Calculator, History, Globe2, ArrowRightLeft, HelpCircle, ChevronDown } from 'lucide-react';
 import { formatNumber } from '../services/currencyService';
 
 interface PairInsightSectionProps {
@@ -26,6 +26,31 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
   const inverseRate = rate > 0 ? 1 / rate : 0;
 
   const isUsdEur = (fromCurrency === 'USD' && toCurrency === 'EUR') || (fromCurrency === 'EUR' && toCurrency === 'USD');
+
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  const faqs = [
+    {
+      q: `What is the live exchange rate between ${fromName} (${fromCurrency}) and ${toName} (${toCurrency})?`,
+      a: `As of today, the live mid-market exchange rate is 1 ${fromCurrency} = ${formatNumber(rate)} ${toCurrency} (and 1 ${toCurrency} = ${formatNumber(inverseRate)} ${fromCurrency}). CurrenFlow provides real-time interbank wholesale rates updated continuously with 0% retail bank markup.`
+    },
+    {
+      q: `Do commercial banks charge hidden fees on ${fromCurrency} to ${toCurrency} transfers?`,
+      a: `Yes. Most traditional commercial banks and airport kiosks include a hidden 3% to 5% spread markup in their quoted currency rate rather than quoting the true mid-market rate. On a 1,000 ${fromCurrency} transfer, this hidden margin can cost you approximately ${formatNumber(estimatedLoss)} ${toCurrency} in lost value compared to the transparent rate.`
+    },
+    {
+      q: `How do I convert ${fromCurrency} to ${toCurrency} at the true mid-market rate?`,
+      a: `To convert at the real mid-market rate, use CurrenFlow's live calculator as your price benchmark, then choose transparent international money transfer services (such as Wise or OFX) that execute transfers at interbank rates with low upfront fees instead of inflated exchange markups.`
+    },
+    {
+      q: `What is the difference between mid-market rate, buy rate, and sell rate?`,
+      a: `The mid-market rate is the exact midpoint between the global buying and selling prices on interbank currency markets. Retail banks buy ${fromCurrency} at a lower 'bid' rate and sell ${toCurrency} at a higher 'ask' rate, pocketing the difference as an undisclosed fee.`
+    },
+    {
+      q: `When is the best time to convert or transfer ${fromCurrency} to ${toCurrency}?`,
+      a: `Exchange rate liquidity is highest and spreads are narrowest during the overlap of major global financial sessions (such as London and New York trading hours between 13:00 and 17:00 UTC). It is best to avoid weekend transfers because retail brokers often widen spreads to protect against opening gaps.`
+    }
+  ];
 
   return (
     <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm space-y-10 my-10">
@@ -182,6 +207,51 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
               The Euro (EUR) is the official currency of 20 European Union member nations, serving as the second most actively traded currency globally. It is governed by the European Central Bank headquartered in Frankfurt am Main, Germany.
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* 8. Frequently Asked Questions (Matches Google FAQPage Schema) */}
+      <div className="border-t border-slate-100 pt-6">
+        <div className="flex items-center gap-2 mb-2">
+          <HelpCircle size={20} className="text-blue-600" />
+          <h3 className="text-xl font-bold text-slate-900">
+            Frequently Asked Questions: {fromCurrency} to {toCurrency}
+          </h3>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+          Straight answers to common questions about exchange rates, transfer fees, and calculation methods for {fromName} ({fromCurrency}) and {toName} ({toCurrency}).
+        </p>
+
+        <div className="space-y-3">
+          {faqs.map((faq, index) => {
+            const isOpen = openFaq === index;
+            return (
+              <div
+                key={index}
+                className="border border-slate-200 rounded-2xl overflow-hidden transition-colors duration-150 bg-slate-50/50"
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(isOpen ? null : index)}
+                  className="w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-bold text-slate-900 text-sm sm:text-base hover:bg-slate-100/70 transition-colors"
+                  aria-expanded={isOpen}
+                >
+                  <span>{faq.q}</span>
+                  <ChevronDown
+                    size={18}
+                    className={`shrink-0 text-slate-500 transition-transform duration-200 ${
+                      isOpen ? 'rotate-180 text-blue-600' : ''
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/60 bg-white">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

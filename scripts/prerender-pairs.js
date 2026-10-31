@@ -14,7 +14,7 @@ if (!fs.existsSync(indexHtmlPath)) {
 
 const baseHtml = fs.readFileSync(indexHtmlPath, 'utf8');
 
-function renderPage(pageUrl, title, description) {
+function renderPage(pageUrl, title, description, extraHead = '') {
   let html = baseHtml;
   html = html.replace(/<title>.*?<\/title>/i, `<title>${title}</title>`);
   html = html.replace(/<meta name="title" content=".*?" \/>/i, `<meta name="title" content="${title}" />`);
@@ -26,8 +26,37 @@ function renderPage(pageUrl, title, description) {
   html = html.replace(/<meta property="twitter:url" content=".*?" \/>/i, `<meta property="twitter:url" content="${pageUrl}" />`);
   html = html.replace(/<meta property="twitter:title" content=".*?" \/>/i, `<meta property="twitter:title" content="${title}" />`);
   html = html.replace(/<meta property="twitter:description" content=".*?" \/>/i, `<meta property="twitter:description" content="${description}" />`);
+  if (extraHead) {
+    html = html.replace('</head>', `${extraHead}\n  </head>`);
+  }
   return html;
 }
+
+const CURRENCY_NAMES = {
+  USD: 'US Dollar',
+  EUR: 'Euro',
+  GBP: 'British Pound',
+  JPY: 'Japanese Yen',
+  CAD: 'Canadian Dollar',
+  AUD: 'Australian Dollar',
+  CHF: 'Swiss Franc',
+  CNY: 'Chinese Yuan',
+  INR: 'Indian Rupee',
+  BDT: 'Bangladeshi Taka',
+  AED: 'UAE Dirham',
+  SAR: 'Saudi Riyal',
+  SGD: 'Singapore Dollar',
+  HKD: 'Hong Kong Dollar',
+  NZD: 'New Zealand Dollar',
+  MXN: 'Mexican Peso',
+  BRL: 'Brazilian Real',
+  ZAR: 'South African Rand',
+  TRY: 'Turkish Lira',
+  KRW: 'South Korean Won',
+  PKR: 'Pakistani Rupee',
+  BTC: 'Bitcoin',
+  ETH: 'Ethereum'
+};
 
 const POPULAR_PAIRS = [
   { from: 'USD', to: 'EUR' },
@@ -62,17 +91,87 @@ const POPULAR_PAIRS = [
   { from: 'BTC', to: 'USD' }
 ];
 
-console.log(`Pre-rendering ${POPULAR_PAIRS.length} popular currency pair pages...`);
+console.log(`Pre-rendering ${POPULAR_PAIRS.length} popular currency pair pages with FAQPage and BreadcrumbList schemas...`);
 
 for (const pair of POPULAR_PAIRS) {
   const slug = `${pair.from.toLowerCase()}-to-${pair.to.toLowerCase()}`;
   const pairUrl = `https://www.currenflow.com/${slug}`;
+  const fromName = CURRENCY_NAMES[pair.from] || pair.from;
+  const toName = CURRENCY_NAMES[pair.to] || pair.to;
 
-  // Under 60 chars title, under 150 chars description
+  // Strict SEO lengths: title < 60 chars, description < 160 chars with high-CTR emoji hook
   const pageTitle = `${pair.from} to ${pair.to}: Live Rates (0% Bank Fees) | CurrenFlow`;
-  const pageDesc = `Convert ${pair.from} to ${pair.to} at live mid-market rates (0% bank fees). Real-time calculator and exchange charts on CurrenFlow.`;
+  const pageDesc = `⚡ Convert ${pair.from} to ${pair.to} at live mid-market rates (0% bank fees). Real-time calculator, fee comparisons & charts on CurrenFlow.`;
 
-  const pairHtml = renderPage(pairUrl, pageTitle, pageDesc);
+  const breadcrumbsSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'CurrenFlow',
+        item: 'https://www.currenflow.com/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: `${pair.from} to ${pair.to}`,
+        item: pairUrl
+      }
+    ]
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `What is the live exchange rate between ${fromName} (${pair.from}) and ${toName} (${pair.to})?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The live mid-market exchange rate between ${fromName} and ${toName} is updated in real time on CurrenFlow based on interbank spot markets, featuring 0% retail bank fee markup.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `Do commercial banks charge hidden fees on ${pair.from} to ${pair.to} transfers?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Yes. Most commercial banks add a 3% to 5% hidden margin to their quoted currency exchange rates in addition to international wire fees.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `How do I convert ${pair.from} to ${pair.to} at the true mid-market rate?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Use CurrenFlow's real-time converter as your price benchmark, then choose transparent transfer providers that execute transfers at interbank rates with low upfront fees.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `What is the difference between mid-market rate, buy rate, and sell rate?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The mid-market rate is the midpoint between global buy and sell orders on wholesale currency markets. Retail banks buy lower and sell higher, keeping the difference as profit.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `When is the best time to convert or send ${pair.from} to ${pair.to}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Market liquidity is highest during the overlap of the London and New York trading sessions (13:00 to 17:00 UTC). Avoiding weekend transfers helps bypass widened retail broker spreads.`
+        }
+      }
+    ]
+  };
+
+  const extraHead = `    <script type="application/ld+json">\n${JSON.stringify([breadcrumbsSchema, faqSchema], null, 2)}\n    </script>`;
+
+  const pairHtml = renderPage(pairUrl, pageTitle, pageDesc, extraHead);
 
   const pairDir = path.join(distDir, slug);
   if (!fs.existsSync(pairDir)) {
@@ -81,14 +180,34 @@ for (const pair of POPULAR_PAIRS) {
   fs.writeFileSync(path.join(pairDir, 'index.html'), pairHtml, 'utf8');
 }
 
-console.log(`✓ Pre-rendered all ${POPULAR_PAIRS.length} currency pair pages.`);
+console.log(`✓ Pre-rendered all ${POPULAR_PAIRS.length} currency pair pages with Google Rich Snippet schemas.`);
 
-// 2. Pre-render About Us Page (under 60 chars title, under 150 chars desc)
+// 2. Pre-render About Us Page with Breadcrumbs
 console.log('Pre-rendering /about page...');
 const aboutUrl = 'https://www.currenflow.com/about';
 const aboutTitle = 'About Us & Methodology | CurrenFlow';
 const aboutDesc = 'CurrenFlow provides transparent mid-market exchange rates, central bank methodology, and consumer-first financial tools.';
-const aboutHtml = renderPage(aboutUrl, aboutTitle, aboutDesc);
+
+const aboutBreadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'CurrenFlow',
+      item: 'https://www.currenflow.com/'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'About Us',
+      item: aboutUrl
+    }
+  ]
+};
+const aboutExtraHead = `    <script type="application/ld+json">\n${JSON.stringify(aboutBreadcrumbSchema, null, 2)}\n    </script>`;
+const aboutHtml = renderPage(aboutUrl, aboutTitle, aboutDesc, aboutExtraHead);
 
 const aboutDir = path.join(distDir, 'about');
 if (!fs.existsSync(aboutDir)) {
@@ -98,12 +217,32 @@ fs.writeFileSync(path.join(aboutDir, 'index.html'), aboutHtml, 'utf8');
 fs.writeFileSync(path.join(distDir, 'about.html'), aboutHtml, 'utf8');
 console.log('✓ Pre-rendered /about and about.html');
 
-// 3. Pre-render Guides Knowledge Base Hub Page (under 60 chars title, under 150 chars desc)
+// 3. Pre-render Guides Knowledge Base Hub Page with Breadcrumbs
 console.log('Pre-rendering /guides hub page...');
 const guidesUrl = 'https://www.currenflow.com/guides';
 const guidesTitle = 'Forex & Currency Transfer Guides | CurrenFlow';
 const guidesDesc = 'Expert foreign exchange guides: avoid hidden commercial bank markups, understand central bank rates, and save on global transfers.';
-const guidesHtml = renderPage(guidesUrl, guidesTitle, guidesDesc);
+
+const guidesBreadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'CurrenFlow',
+      item: 'https://www.currenflow.com/'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Guides',
+      item: guidesUrl
+    }
+  ]
+};
+const guidesExtraHead = `    <script type="application/ld+json">\n${JSON.stringify(guidesBreadcrumbSchema, null, 2)}\n    </script>`;
+const guidesHtml = renderPage(guidesUrl, guidesTitle, guidesDesc, guidesExtraHead);
 
 const guidesDir = path.join(distDir, 'guides');
 if (!fs.existsSync(guidesDir)) {
@@ -113,7 +252,7 @@ fs.writeFileSync(path.join(guidesDir, 'index.html'), guidesHtml, 'utf8');
 fs.writeFileSync(path.join(distDir, 'guides.html'), guidesHtml, 'utf8');
 console.log('✓ Pre-rendered /guides and guides.html');
 
-// 4. Pre-render 5 In-Depth Financial Guide Articles (all titles < 60 chars, descriptions < 150 chars)
+// 4. Pre-render 5 In-Depth Financial Guide Articles with Breadcrumbs & Article schema
 const GUIDES = [
   {
     slug: 'hidden-bank-exchange-rate-fees',
@@ -142,11 +281,52 @@ const GUIDES = [
   }
 ];
 
-console.log(`Pre-rendering ${GUIDES.length} financial guide articles...`);
+console.log(`Pre-rendering ${GUIDES.length} financial guide articles with Article & Breadcrumb schemas...`);
 
 for (const guide of GUIDES) {
   const guideUrl = `https://www.currenflow.com/guides/${guide.slug}`;
-  const guideArticleHtml = renderPage(guideUrl, guide.title, guide.summary);
+  const guideBreadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'CurrenFlow',
+        item: 'https://www.currenflow.com/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Guides',
+        item: 'https://www.currenflow.com/guides'
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: guide.title.replace(' | CurrenFlow', ''),
+        item: guideUrl
+      }
+    ]
+  };
+
+  const guideArticleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: guide.title.replace(' | CurrenFlow', ''),
+    description: guide.summary,
+    url: guideUrl,
+    inLanguage: 'en',
+    publisher: {
+      '@type': 'Organization',
+      name: 'CurrenFlow',
+      url: 'https://www.currenflow.com/',
+      logo: 'https://www.currenflow.com/logo.png'
+    }
+  };
+
+  const guideExtraHead = `    <script type="application/ld+json">\n${JSON.stringify([guideBreadcrumbSchema, guideArticleSchema], null, 2)}\n    </script>`;
+  const guideArticleHtml = renderPage(guideUrl, guide.title, guide.summary, guideExtraHead);
 
   const guideArticleDir = path.join(distDir, 'guides', guide.slug);
   if (!fs.existsSync(guideArticleDir)) {
@@ -156,4 +336,4 @@ for (const guide of GUIDES) {
 }
 
 console.log(`✓ Successfully pre-rendered all ${GUIDES.length} guide articles!`);
-console.log('All static pages generated with perfect self-canonical tags and optimal SEO lengths.');
+console.log('All static pages generated with perfect self-canonical tags, Rich Snippet schemas, and optimal SEO lengths.');

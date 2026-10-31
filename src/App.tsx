@@ -154,7 +154,7 @@ export function App() {
     }
   }, [parseLocation]);
 
-  // Dynamic SEO Title, Description, and Canonical updates for Home & Pair views
+  // Dynamic SEO Title, Description, Canonical, and Rich Snippet JSON-LD for Home & Pair views
   useEffect(() => {
     if (typeof window !== 'undefined' && pageView === 'home') {
       const isDefaultHome = fromCurrency === 'USD' && toCurrency === 'EUR' && window.location.pathname === '/';
@@ -172,12 +172,12 @@ export function App() {
         if (isDefaultHome) {
           metaDesc.setAttribute(
             'content',
-            'Convert 160+ world currencies at live mid-market exchange rates (0% bank fees). Instant currency converter with zero retail markups.'
+            '⚡ Convert 160+ world currencies at live mid-market exchange rates (0% bank fees). Instant real-time calculator with zero retail markups.'
           );
         } else {
           metaDesc.setAttribute(
             'content',
-            `Convert ${fromCurrency} to ${toCurrency} at live mid-market rates (0% bank fees). Real-time calculator and exchange charts on CurrenFlow.`
+            `⚡ Convert ${fromCurrency} to ${toCurrency} at live mid-market rates (0% bank fees). Real-time calculator, fee comparisons & charts on CurrenFlow.`
           );
         }
       }
@@ -191,6 +191,99 @@ export function App() {
       // Clean up any obsolete hreflang alternate tags
       const alternateTags = document.querySelectorAll('link[rel="alternate"][hreflang]');
       alternateTags.forEach((tag) => tag.remove());
+
+      // Dynamic Rich Snippet JSON-LD Schemas (BreadcrumbList & FAQPage)
+      const fromObj = CURRENCIES.find((c) => c.code === fromCurrency);
+      const toObj = CURRENCIES.find((c) => c.code === toCurrency);
+      const fromName = fromObj?.name || fromCurrency;
+      const toName = toObj?.name || toCurrency;
+
+      const breadcrumbSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'CurrenFlow',
+            item: 'https://www.currenflow.com/'
+          },
+          ...(isDefaultHome
+            ? []
+            : [
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: `${fromCurrency} to ${toCurrency}`,
+                  item: canonicalUrl
+                }
+              ])
+        ]
+      };
+
+      const faqSchema = isDefaultHome
+        ? null
+        : {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: `What is the live exchange rate between ${fromName} (${fromCurrency}) and ${toName} (${toCurrency})?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `The live mid-market exchange rate between ${fromName} and ${toName} is updated in real time on CurrenFlow based on interbank spot markets, featuring 0% retail bank fee markup.`
+                }
+              },
+              {
+                '@type': 'Question',
+                name: `Do commercial banks charge hidden fees on ${fromCurrency} to ${toCurrency} transfers?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `Yes. Most commercial banks add a 3% to 5% hidden margin to their quoted currency exchange rates in addition to international wire fees.`
+                }
+              },
+              {
+                '@type': 'Question',
+                name: `How do I convert ${fromCurrency} to ${toCurrency} at the true mid-market rate?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `Use CurrenFlow's real-time converter as your price benchmark, then choose transparent transfer providers that execute transfers at interbank rates with low upfront fees.`
+                }
+              },
+              {
+                '@type': 'Question',
+                name: `What is the difference between mid-market rate, buy rate, and sell rate?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `The mid-market rate is the midpoint between global buy and sell orders on wholesale currency markets. Retail banks buy lower and sell higher, keeping the difference as profit.`
+                }
+              },
+              {
+                '@type': 'Question',
+                name: `When is the best time to convert or send ${fromCurrency} to ${toCurrency}?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `Market liquidity is highest during the overlap of the London and New York trading sessions (13:00 to 17:00 UTC). Avoiding weekend transfers helps bypass widened retail broker spreads.`
+                }
+              }
+            ]
+          };
+
+      const schemasToInject = faqSchema ? [breadcrumbSchema, faqSchema] : [breadcrumbSchema];
+      let pairSchemaEl = document.getElementById('currenflow-pair-schemas') as HTMLScriptElement | null;
+      if (!pairSchemaEl) {
+        pairSchemaEl = document.createElement('script');
+        pairSchemaEl.id = 'currenflow-pair-schemas';
+        pairSchemaEl.type = 'application/ld+json';
+        document.head.appendChild(pairSchemaEl);
+      }
+      pairSchemaEl.textContent = JSON.stringify(schemasToInject);
+
+      return () => {
+        const el = document.getElementById('currenflow-pair-schemas');
+        if (el) el.remove();
+      };
     }
   }, [fromCurrency, toCurrency, pageView]);
 
