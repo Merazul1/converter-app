@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Landmark, TrendingUp, AlertCircle, ShieldCheck, Calculator, History, Globe2, ArrowRightLeft, HelpCircle, ChevronDown } from 'lucide-react';
 import { formatNumber } from '../services/currencyService';
+import { getCurrencyInsight } from '../data/currencyInsights';
 
 interface PairInsightSectionProps {
   fromCurrency: string;
@@ -25,7 +26,8 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
   const estimatedLoss = realConverted - bankReceived;
   const inverseRate = rate > 0 ? 1 / rate : 0;
 
-  const isUsdEur = (fromCurrency === 'USD' && toCurrency === 'EUR') || (fromCurrency === 'EUR' && toCurrency === 'USD');
+  const fromInsight = getCurrencyInsight(fromCurrency, fromName);
+  const toInsight = getCurrencyInsight(toCurrency, toName);
 
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -36,7 +38,7 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
     },
     {
       q: `Do commercial banks charge hidden fees on ${fromCurrency} to ${toCurrency} transfers?`,
-      a: `Yes. Most traditional commercial banks and airport kiosks include a hidden 3% to 5% spread markup in their quoted currency rate rather than quoting the true mid-market rate. On a 1,000 ${fromCurrency} transfer, this hidden margin can cost you approximately ${formatNumber(estimatedLoss)} ${toCurrency} in lost value compared to the transparent rate.`
+      a: `Yes. Most traditional commercial banks (${toInsight.sampleBanks}) include an undisclosed 3% to 5% spread markup in their quoted currency exchange rates rather than passing through the mid-market rate. On a 1,000 ${fromCurrency} transfer, this hidden spread can cost you approximately ${formatNumber(estimatedLoss)} ${toCurrency} in lost value compared to the transparent rate.`
     },
     {
       q: `How do I convert ${fromCurrency} to ${toCurrency} at the true mid-market rate?`,
@@ -74,7 +76,7 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
           The Bank Fee Reality on {fromCurrency}/{toCurrency} Transfers
         </h3>
         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
-          When sending money from {fromCurrency} to {toCurrency} through traditional commercial banks, a 3% to 5% hidden markup is typically added into the retail exchange rate quotation.
+          When sending money from {fromCurrency} to {toCurrency} through traditional commercial banks ({toInsight.sampleBanks}), a 3% to 5% hidden markup is typically added into the retail exchange rate quotation.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
           <div className="bg-white p-4 rounded-xl border border-slate-200">
@@ -123,36 +125,32 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
           <History size={20} className="text-indigo-600" /> Historical {fromCurrency} to {toCurrency} Exchange Rates &amp; Ranges
         </h3>
         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
-          Exchange rates between major world currencies fluctuate dynamically across every 24-hour global trading cycle. {isUsdEur ? (
-            <>Over recent quarters, the USD/EUR exchange rate has traded in a defined macroeconomic band between <strong>0.90 EUR and 0.96 EUR per US Dollar</strong> (or 1.04 to 1.11 USD per Euro). This range reflects changing investor sentiment regarding interest rate divergence between Washington and Frankfurt.</>
-          ) : (
-            <>Monitoring the historical 30-day and 90-day moving averages for {fromCurrency}/{toCurrency} helps business managers, expats, and travelers identify whether current quotations represent an advantageous conversion window or a cyclical peak.</>
-          )}
+          Exchange rates between major world currencies fluctuate dynamically across every 24-hour global trading cycle. {toInsight.historicalRange || fromInsight.historicalRange || `Monitoring the historical 30-day and 90-day moving averages for ${fromCurrency}/${toCurrency} helps business managers, expats, and travelers identify whether current quotations represent an advantageous conversion window or a cyclical peak.`}
         </p>
         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          Historical volatility is generally driven by quarterly economic GDP reports, monthly labor market figures, and geopolitical developments affecting bilateral trade balances.
+          Historical volatility is generally driven by quarterly economic GDP reports, monthly labor market figures, interest rate policy shifts, and geopolitical developments affecting bilateral trade balances.
         </p>
       </div>
 
-      {/* 5. Central Bank Monetary Policy: Federal Reserve vs. ECB */}
+      {/* 5. Central Bank Monetary Policy: From vs. To */}
       <div className="border-t border-slate-100 pt-6">
         <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
           <Landmark size={20} className="text-blue-600" /> Central Bank Monetary Policy &amp; Economic Drivers
         </h3>
         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
-          The primary driver of the {fromCurrency} to {toCurrency} exchange rate is the interest rate differential established by national monetary authorities.
+          The primary macroeconomic driver of the {fromCurrency} to {toCurrency} exchange rate is the interest rate differential established by national monetary authorities.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm">
-            <h4 className="font-bold text-slate-900 mb-1">Federal Reserve &amp; US Dollar (USD)</h4>
+            <h4 className="font-bold text-slate-900 mb-1">{fromInsight.centralBank} ({fromCurrency})</h4>
             <p className="text-slate-600 leading-relaxed">
-              The Federal Reserve's Federal Open Market Committee (FOMC) sets benchmark borrowing costs. Higher interest rates attract global institutional yield seekers, strengthening USD demand relative to foreign currencies.
+              {fromInsight.centralBankPolicy}
             </p>
           </div>
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm">
-            <h4 className="font-bold text-slate-900 mb-1">European Central Bank &amp; Euro (EUR)</h4>
+            <h4 className="font-bold text-slate-900 mb-1">{toInsight.centralBank} ({toCurrency})</h4>
             <p className="text-slate-600 leading-relaxed">
-              The European Central Bank (ECB) in Frankfurt manages Eurozone inflation and deposit facility rates across 20 member nations. Rate decisions directly impact European sovereign debt yields and EUR valuation.
+              {toInsight.centralBankPolicy}
             </p>
           </div>
         </div>
@@ -164,6 +162,14 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
           <ShieldCheck size={20} className="text-emerald-600" /> Best Practices for Sending Money from {fromCurrency} to {toCurrency}
         </h3>
         <ul className="space-y-3 text-xs sm:text-sm text-slate-600">
+          {toInsight.transferAdvice && (
+            <li className="flex items-start gap-2.5 p-3 rounded-xl bg-emerald-50/50 border border-emerald-200/60 text-slate-700">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 mt-1.5 shrink-0"></span>
+              <div>
+                <strong>Local Market Tip for {toName}:</strong> {toInsight.transferAdvice}
+              </div>
+            </li>
+          )}
           <li className="flex items-start gap-2.5">
             <span className="w-2 h-2 rounded-full bg-emerald-600 mt-1.5 shrink-0"></span>
             <div>
@@ -185,7 +191,7 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
         </ul>
       </div>
 
-      {/* 7. Currency Overview: USD & EUR */}
+      {/* 7. Currency Overview: From and To */}
       <div className="border-t border-slate-100 pt-6">
         <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
           <Globe2 size={20} className="text-slate-700" /> Currency Profiles: {fromName} and {toName}
@@ -196,7 +202,7 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
               <ArrowRightLeft size={16} className="text-blue-600" /> Base Currency: {fromName} ({fromCurrency})
             </div>
             <p className="leading-relaxed">
-              The United States Dollar (USD) represents the world’s preeminent global reserve currency, accounting for over 85% of worldwide foreign exchange trading turnover and backing international commodities including crude oil and gold.
+              {fromInsight.profile}
             </p>
           </div>
           <div className="p-4 rounded-xl border border-slate-200">
@@ -204,7 +210,7 @@ export const PairInsightSection: React.FC<PairInsightSectionProps> = ({
               <ArrowRightLeft size={16} className="text-indigo-600" /> Quote Currency: {toName} ({toCurrency})
             </div>
             <p className="leading-relaxed">
-              The Euro (EUR) is the official currency of 20 European Union member nations, serving as the second most actively traded currency globally. It is governed by the European Central Bank headquartered in Frankfurt am Main, Germany.
+              {toInsight.profile}
             </p>
           </div>
         </div>

@@ -14,7 +14,7 @@ if (!fs.existsSync(indexHtmlPath)) {
 
 const baseHtml = fs.readFileSync(indexHtmlPath, 'utf8');
 
-function renderPage(pageUrl, title, description, extraHead = '') {
+function renderPage(pageUrl, title, description, extraHead = '', bodyReplacer = null) {
   let html = baseHtml;
   html = html.replace(/<title>.*?<\/title>/i, `<title>${title}</title>`);
   html = html.replace(/<meta name="title" content=".*?" \/>/i, `<meta name="title" content="${title}" />`);
@@ -28,6 +28,9 @@ function renderPage(pageUrl, title, description, extraHead = '') {
   html = html.replace(/<meta property="twitter:description" content=".*?" \/>/i, `<meta property="twitter:description" content="${description}" />`);
   if (extraHead) {
     html = html.replace('</head>', `${extraHead}\n  </head>`);
+  }
+  if (typeof bodyReplacer === 'function') {
+    html = bodyReplacer(html);
   }
   return html;
 }
@@ -91,7 +94,7 @@ const POPULAR_PAIRS = [
   { from: 'BTC', to: 'USD' }
 ];
 
-console.log(`Pre-rendering ${POPULAR_PAIRS.length} popular currency pair pages with FAQPage and BreadcrumbList schemas...`);
+console.log(`Pre-rendering ${POPULAR_PAIRS.length} popular currency pair pages with FAQPage, Breadcrumbs, and Pair-Specific HTML...`);
 
 for (const pair of POPULAR_PAIRS) {
   const slug = `${pair.from.toLowerCase()}-to-${pair.to.toLowerCase()}`;
@@ -171,7 +174,54 @@ for (const pair of POPULAR_PAIRS) {
 
   const extraHead = `    <script type="application/ld+json">\n${JSON.stringify([breadcrumbsSchema, faqSchema], null, 2)}\n    </script>`;
 
-  const pairHtml = renderPage(pairUrl, pageTitle, pageDesc, extraHead);
+  // Custom body replacer for static crawler fallback
+  const pairBodyReplacer = (rawHtml) => {
+    let replaced = rawHtml;
+    // Replace generic H1 with pair-specific H1
+    replaced = replaced.replace(
+      /<h1 style="[^"]*">[\s\S]*?<\/h1>/i,
+      `<h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; line-height: 1.25; margin-bottom: 16px;">${pair.from} to ${pair.to} Live Exchange Rate &amp; Currency Converter</h1>`
+    );
+
+    // Replace generic subtitle paragraph with pair-specific description
+    replaced = replaced.replace(
+      /<p style="font-size: 1\.125rem; color: #475569; max-width: 720px; margin: 0 auto; line-height: 1\.6;">[\s\S]*?<\/p>/i,
+      `<p style="font-size: 1.125rem; color: #475569; max-width: 720px; margin: 0 auto; line-height: 1.6;">Convert ${fromName} (${pair.from}) to ${toName} (${pair.to}) at live mid-market exchange rates with 0% hidden banking markups. Calculate real-time conversion totals, review historical charts, and compare commercial bank transfer fees.</p>`
+    );
+
+    // Insert pair-specific editorial insight & FAQ section in static HTML before </main>
+    const pairSectionHtml = `
+        <section style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 48px;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 16px;">Understanding ${pair.from} to ${pair.to} Rates &amp; Transfer Costs</h2>
+          <p style="color: #475569; line-height: 1.6; margin-bottom: 16px;">When transferring money between ${fromName} and ${toName}, high-street commercial banks routinely add a 3% to 5% hidden markup to their quoted retail exchange rates. CurrenFlow provides transparent, real-time mid-market rates sourced directly from interbank financial feeds with zero hidden markups.</p>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; color: #0f172a; margin-top: 0; margin-bottom: 8px;">Key Currency Pair Information</h3>
+            <ul style="color: #475569; line-height: 1.8; margin: 0; padding-left: 20px;">
+              <li><strong>Base Currency:</strong> ${fromName} (${pair.from})</li>
+              <li><strong>Quote Currency:</strong> ${toName} (${pair.to})</li>
+              <li><strong>Calculation Formula:</strong> Amount (${pair.to}) = Amount (${pair.from}) &times; Live Mid-Market Rate</li>
+              <li><strong>Transfer Advice:</strong> Always audit the net deliverable amount against CurrenFlow live rates before confirming bank wire transfers.</li>
+            </ul>
+          </div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 16px;">Frequently Asked Questions: ${pair.from} to ${pair.to}</h3>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <h4 style="margin: 0 0 6px 0; font-size: 14px; font-weight: 700; color: #0f172a;">What is the live exchange rate between ${fromName} and ${toName}?</h4>
+              <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">The live exchange rate between ${pair.from} and ${pair.to} reflects wholesale interbank spot prices. CurrenFlow updates continuously to display genuine mid-market rates with 0% retail bank markup.</p>
+            </div>
+            <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <h4 style="margin: 0 0 6px 0; font-size: 14px; font-weight: 700; color: #0f172a;">Do commercial banks charge hidden fees on ${pair.from} to ${pair.to} transfers?</h4>
+              <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">Yes, high-street retail banks frequently insert a 3% to 5% spread margin into the exchange rate in addition to international wire fees, costing users substantial money on large conversions.</p>
+            </div>
+          </div>
+        </section>
+      </main>`;
+
+    replaced = replaced.replace('</main>', pairSectionHtml);
+    return replaced;
+  };
+
+  const pairHtml = renderPage(pairUrl, pageTitle, pageDesc, extraHead, pairBodyReplacer);
 
   const pairDir = path.join(distDir, slug);
   if (!fs.existsSync(pairDir)) {
@@ -180,7 +230,7 @@ for (const pair of POPULAR_PAIRS) {
   fs.writeFileSync(path.join(pairDir, 'index.html'), pairHtml, 'utf8');
 }
 
-console.log(`✓ Pre-rendered all ${POPULAR_PAIRS.length} currency pair pages with Google Rich Snippet schemas.`);
+console.log(`✓ Pre-rendered all ${POPULAR_PAIRS.length} currency pair pages with Google Rich Snippet schemas and pair-specific HTML.`);
 
 // 2. Pre-render About Us Page with Breadcrumbs
 console.log('Pre-rendering /about page...');
