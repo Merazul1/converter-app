@@ -61,6 +61,51 @@ const CURRENCY_NAMES = {
   ETH: 'Ethereum'
 };
 
+// Real, stable facts per currency — used to make each pair page actually
+// say something unique instead of swapping a code into identical sentences.
+const CURRENCY_META = {
+  USD: { issuer: 'the Federal Reserve', region: 'United States', crypto: false },
+  EUR: { issuer: 'the European Central Bank', region: 'the Eurozone', crypto: false },
+  GBP: { issuer: 'the Bank of England', region: 'the United Kingdom', crypto: false },
+  JPY: { issuer: 'the Bank of Japan', region: 'Japan', crypto: false },
+  CAD: { issuer: 'the Bank of Canada', region: 'Canada', crypto: false },
+  AUD: { issuer: 'the Reserve Bank of Australia', region: 'Australia', crypto: false },
+  CHF: { issuer: 'the Swiss National Bank', region: 'Switzerland', crypto: false },
+  CNY: { issuer: "the People's Bank of China", region: 'mainland China', crypto: false },
+  INR: { issuer: 'the Reserve Bank of India', region: 'India', crypto: false },
+  BDT: { issuer: 'Bangladesh Bank', region: 'Bangladesh', crypto: false },
+  AED: { issuer: 'the Central Bank of the UAE', region: 'the United Arab Emirates', crypto: false },
+  SAR: { issuer: 'the Saudi Central Bank (SAMA)', region: 'Saudi Arabia', crypto: false },
+  SGD: { issuer: 'the Monetary Authority of Singapore', region: 'Singapore', crypto: false },
+  HKD: { issuer: 'the Hong Kong Monetary Authority', region: 'Hong Kong', crypto: false },
+  NZD: { issuer: 'the Reserve Bank of New Zealand', region: 'New Zealand', crypto: false },
+  MXN: { issuer: 'the Bank of Mexico', region: 'Mexico', crypto: false },
+  BRL: { issuer: 'the Central Bank of Brazil', region: 'Brazil', crypto: false },
+  ZAR: { issuer: 'the South African Reserve Bank', region: 'South Africa', crypto: false },
+  TRY: { issuer: 'the Central Bank of the Republic of Turkey', region: 'Turkey', crypto: false },
+  KRW: { issuer: 'the Bank of Korea', region: 'South Korea', crypto: false },
+  PKR: { issuer: 'the State Bank of Pakistan', region: 'Pakistan', crypto: false },
+  BTC: { issuer: 'no central authority — it is a decentralized network', region: 'a global peer-to-peer network', crypto: true },
+  ETH: { issuer: 'no central authority — it is a decentralized network', region: 'a global peer-to-peer network', crypto: true }
+};
+
+// Short, pair-specific "why people convert this" lines. Generic, non-fabricated
+// context (these are well-known, long-standing remittance/trade corridors) so
+// each page gets a distinct opening instead of the same boilerplate.
+const PAIR_CONTEXT = {
+  'usd-inr': 'one of the largest remittance corridors in the world, driven by Indian professionals and students based in the US',
+  'usd-bdt': 'a major remittance corridor for the Bangladeshi diaspora working abroad',
+  'usd-pkr': 'a widely used corridor for remittances from Pakistani expatriates in North America',
+  'usd-mxn': 'one of the highest-volume remittance corridors globally, linked to cross-border labor and trade between the US and Mexico',
+  'usd-cny': 'closely watched by importers and exporters due to the scale of US-China trade',
+  'usd-aed': 'commonly used by expatriates and businesses operating in or sending money to the UAE',
+  'usd-sar': 'relevant to the large expatriate workforce remitting earnings from Saudi Arabia',
+  'eur-gbp': 'one of the most actively traded pairs in Europe, reflecting UK-Eurozone trade and travel',
+  'gbp-eur': 'closely tracked around UK-EU trade data and Bank of England / ECB policy decisions',
+  'usd-btc': 'tracked by traders and holders as a benchmark price for Bitcoin against the US dollar',
+  'btc-usd': 'the reference pair most exchanges use to price Bitcoin in US dollar terms'
+};
+
 const POPULAR_PAIRS = [
   { from: 'USD', to: 'EUR' },
   { from: 'EUR', to: 'USD' },
@@ -139,34 +184,18 @@ for (const pair of POPULAR_PAIRS) {
       },
       {
         '@type': 'Question',
-        name: `Do commercial banks charge hidden fees on ${pair.from} to ${pair.to} transfers?`,
+        name: `Do banks charge hidden fees converting ${pair.from} to ${pair.to}?`,
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `Yes. Most commercial banks add a 3% to 5% hidden margin to their quoted currency exchange rates in addition to international wire fees.`
+          text: `See our guide to hidden bank exchange rate fees for how retail markups are typically applied on this corridor: https://www.currenflow.com/guides/hidden-bank-exchange-rate-fees`
         }
       },
       {
         '@type': 'Question',
-        name: `How do I convert ${pair.from} to ${pair.to} at the true mid-market rate?`,
+        name: `Who issues ${fromName} and ${toName}?`,
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `Use CurrenFlow's real-time converter as your price benchmark, then choose transparent transfer providers that execute transfers at interbank rates with low upfront fees.`
-        }
-      },
-      {
-        '@type': 'Question',
-        name: `What is the difference between mid-market rate, buy rate, and sell rate?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `The mid-market rate is the midpoint between global buy and sell orders on wholesale currency markets. Retail banks buy lower and sell higher, keeping the difference as profit.`
-        }
-      },
-      {
-        '@type': 'Question',
-        name: `When is the best time to convert or send ${pair.from} to ${pair.to}?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `Market liquidity is highest during the overlap of the London and New York trading sessions (13:00 to 17:00 UTC). Avoiding weekend transfers helps bypass widened retail broker spreads.`
+          text: `${fromName} is issued by ${(CURRENCY_META[pair.from] || {}).issuer || 'its national monetary authority'}. ${toName} is issued by ${(CURRENCY_META[pair.to] || {}).issuer || 'its national monetary authority'}.`
         }
       }
     ]
@@ -190,28 +219,43 @@ for (const pair of POPULAR_PAIRS) {
     );
 
     // Insert pair-specific editorial insight & FAQ section in static HTML before </main>
+    const fromMeta = CURRENCY_META[pair.from] || {};
+    const toMeta = CURRENCY_META[pair.to] || {};
+    const contextLine = PAIR_CONTEXT[slug];
+    const isCryptoPair = fromMeta.crypto || toMeta.crypto;
+
+    const intro = contextLine
+      ? `${pair.from}/${pair.to} is ${contextLine}. ${fromName} is issued by ${fromMeta.issuer || 'its national authority'}; ${toName} is issued by ${toMeta.issuer || 'its national authority'}.`
+      : `${fromName} is issued by ${fromMeta.issuer || 'its national authority'} (${fromMeta.region || pair.from}), while ${toName} is issued by ${toMeta.issuer || 'its national authority'} (${toMeta.region || pair.to}).`;
+
+    const bankFeeLine = isCryptoPair
+      ? `Crypto exchanges typically widen the spread around ${pair.from}/${pair.to} rather than charging a flat fee, so the quoted "price" often already includes a 1%–3% margin before any withdrawal cost.`
+      : `When moving money between ${fromMeta.region || fromName} and ${toMeta.region || toName}, commercial banks commonly apply a retail markup on top of the mid-market rate — see our <a href="/guides/hidden-bank-exchange-rate-fees">guide to hidden bank fees</a> for how that markup typically compares to the interbank rate.`;
+
     const pairSectionHtml = `
         <section style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 48px;">
-          <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 16px;">Understanding ${pair.from} to ${pair.to} Rates &amp; Transfer Costs</h2>
-          <p style="color: #475569; line-height: 1.6; margin-bottom: 16px;">When transferring money between ${fromName} and ${toName}, high-street commercial banks routinely add a 3% to 5% hidden markup to their quoted retail exchange rates. CurrenFlow provides transparent, real-time mid-market rates sourced directly from interbank financial feeds with zero hidden markups.</p>
+          <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 16px;">About the ${pair.from}/${pair.to} Pair</h2>
+          <p style="color: #475569; line-height: 1.6; margin-bottom: 16px;">${intro}</p>
+          <p style="color: #475569; line-height: 1.6; margin-bottom: 16px;">${bankFeeLine}</p>
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
             <h3 style="font-size: 1.125rem; font-weight: 600; color: #0f172a; margin-top: 0; margin-bottom: 8px;">Key Currency Pair Information</h3>
             <ul style="color: #475569; line-height: 1.8; margin: 0; padding-left: 20px;">
-              <li><strong>Base Currency:</strong> ${fromName} (${pair.from})</li>
-              <li><strong>Quote Currency:</strong> ${toName} (${pair.to})</li>
+              <li><strong>Base Currency:</strong> ${fromName} (${pair.from}) &mdash; ${fromMeta.region || 'n/a'}</li>
+              <li><strong>Quote Currency:</strong> ${toName} (${pair.to}) &mdash; ${toMeta.region || 'n/a'}</li>
               <li><strong>Calculation Formula:</strong> Amount (${pair.to}) = Amount (${pair.from}) &times; Live Mid-Market Rate</li>
-              <li><strong>Transfer Advice:</strong> Always audit the net deliverable amount against CurrenFlow live rates before confirming bank wire transfers.</li>
             </ul>
           </div>
           <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 16px;">Frequently Asked Questions: ${pair.from} to ${pair.to}</h3>
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
               <h4 style="margin: 0 0 6px 0; font-size: 14px; font-weight: 700; color: #0f172a;">What is the live exchange rate between ${fromName} and ${toName}?</h4>
-              <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">The live exchange rate between ${pair.from} and ${pair.to} reflects wholesale interbank spot prices. CurrenFlow updates continuously to display genuine mid-market rates with 0% retail bank markup.</p>
+              <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">CurrenFlow shows the live mid-market rate for ${pair.from}/${pair.to}, sourced from interbank feeds, with no markup added to the displayed number.</p>
             </div>
             <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-              <h4 style="margin: 0 0 6px 0; font-size: 14px; font-weight: 700; color: #0f172a;">Do commercial banks charge hidden fees on ${pair.from} to ${pair.to} transfers?</h4>
-              <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">Yes, high-street retail banks frequently insert a 3% to 5% spread margin into the exchange rate in addition to international wire fees, costing users substantial money on large conversions.</p>
+              <h4 style="margin: 0 0 6px 0; font-size: 14px; font-weight: 700; color: #0f172a;">${isCryptoPair ? `Does the ${pair.from}/${pair.to} price vary between exchanges?` : `Do banks charge hidden fees converting ${pair.from} to ${pair.to}?`}</h4>
+              <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">${isCryptoPair
+                ? `Yes — because ${isCryptoPair ? 'crypto' : ''} markets are fragmented across exchanges, the quoted ${pair.from}/${pair.to} price can differ by venue; CurrenFlow's rate is a reference, not an order-book price.`
+                : `See our <a href="/guides/hidden-bank-exchange-rate-fees">bank fee guide</a> for a full breakdown of how retail markups are typically applied on this corridor.`}</p>
             </div>
           </div>
         </section>
