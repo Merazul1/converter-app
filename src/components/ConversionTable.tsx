@@ -14,7 +14,14 @@ export const ConversionTable: React.FC<ConversionTableProps> = ({
   rate,
   inverseRate,
 }) => {
-  const tableValues = [1, 5, 10, 25, 50, 100, 250, 500, 1000, 5000];
+  let tableValues = [1, 5, 10, 25, 50, 100, 250, 500, 1000, 5000];
+  if (toCurrency === 'PKR' || fromCurrency === 'PKR') {
+    tableValues = [1, 1.3, 10, 31, 100, 160, 185, 215, 1000, 4200, 60000];
+  } else if (toCurrency === 'JPY' || fromCurrency === 'JPY') {
+    tableValues = [1, 10, 50, 100, 500, 1000, 1800, 4200, 10000];
+  } else if (['INR', 'BDT'].includes(toCurrency) || ['INR', 'BDT'].includes(fromCurrency)) {
+    tableValues = [1, 10, 50, 100, 250, 500, 1000, 2500, 5000, 10000];
+  }
 
   return (
     <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200/80">

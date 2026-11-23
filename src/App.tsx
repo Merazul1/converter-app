@@ -161,10 +161,18 @@ export function App() {
       const pairSlug = isDefaultHome ? '' : `/${fromCurrency.toLowerCase()}-to-${toCurrency.toLowerCase()}`;
       const canonicalUrl = `https://www.currenflow.com${pairSlug || '/'}`;
 
+      const currentRate = ratesData?.rates?.[toCurrency] && ratesData?.rates?.[fromCurrency]
+        ? (ratesData.rates[toCurrency] / ratesData.rates[fromCurrency])
+        : null;
+      const rateStr = currentRate
+        ? (currentRate >= 100 ? currentRate.toFixed(2) : currentRate >= 1 ? currentRate.toFixed(2) : currentRate >= 0.01 ? currentRate.toFixed(4) : currentRate.toFixed(6))
+        : '';
+
       if (isDefaultHome) {
-        document.title = 'CurrenFlow: Live Currency Converter';
+        document.title = 'CurrenFlow: Live Currency Converter & Exchange Rates';
       } else {
-        document.title = `${fromCurrency} to ${toCurrency}: Live Rates (0% Bank Fees) | CurrenFlow`;
+        const ratePart = rateStr ? `1 ${fromCurrency} = ${rateStr} ${toCurrency}` : `${fromCurrency} to ${toCurrency}`;
+        document.title = `${fromCurrency} to ${toCurrency}: ${ratePart} Live Rate | CurrenFlow`;
       }
 
       const metaDesc = document.querySelector('meta[name="description"]');
@@ -172,12 +180,13 @@ export function App() {
         if (isDefaultHome) {
           metaDesc.setAttribute(
             'content',
-            '⚡ Convert 160+ world currencies at live mid-market exchange rates (0% bank fees). Instant real-time calculator with zero retail markups.'
+            'Convert 160+ world currencies at live mid-market exchange rates. Free instant currency calculator, popular conversion tables, and real-time interbank charts.'
           );
         } else {
+          const rateSentence = rateStr ? `1 ${fromCurrency} = ${rateStr} ${toCurrency}. ` : '';
           metaDesc.setAttribute(
             'content',
-            `⚡ Convert ${fromCurrency} to ${toCurrency} at live mid-market rates (0% bank fees). Real-time calculator, fee comparisons & charts on CurrenFlow.`
+            `Live ${fromCurrency} to ${toCurrency} exchange rate: ${rateSentence}Free instant currency calculator, popular conversion tables, and real-time interbank charts.`
           );
         }
       }
@@ -229,10 +238,10 @@ export function App() {
             mainEntity: [
               {
                 '@type': 'Question',
-                name: `What is the live exchange rate between ${fromName} (${fromCurrency}) and ${toName} (${toCurrency})?`,
+                name: `What is 1 ${fromCurrency} to ${toCurrency} today?`,
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: `The live mid-market exchange rate between ${fromName} and ${toName} is updated in real time on CurrenFlow based on interbank spot markets, featuring 0% retail bank fee markup.`
+                  text: `1 ${fromName} (${fromCurrency}) is currently ${rateStr ? `${rateStr} ${toName} (${toCurrency})` : 'updated live'} at the interbank mid-market rate on CurrenFlow.`
                 }
               },
               {
@@ -240,31 +249,15 @@ export function App() {
                 name: `Do commercial banks charge hidden fees on ${fromCurrency} to ${toCurrency} transfers?`,
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: `Yes. Most commercial banks add a 3% to 5% hidden margin to their quoted currency exchange rates in addition to international wire fees.`
+                  text: `Yes, retail banks frequently add a 3% to 5% spread margin on exchange rates. See our guide to hidden bank fees: https://www.currenflow.com/guides/hidden-bank-exchange-rate-fees`
                 }
               },
               {
                 '@type': 'Question',
-                name: `How do I convert ${fromCurrency} to ${toCurrency} at the true mid-market rate?`,
+                name: `How does CurrenFlow calculate ${fromCurrency} to ${toCurrency} conversions?`,
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: `Use CurrenFlow's real-time converter as your price benchmark, then choose transparent transfer providers that execute transfers at interbank rates with low upfront fees.`
-                }
-              },
-              {
-                '@type': 'Question',
-                name: `What is the difference between mid-market rate, buy rate, and sell rate?`,
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: `The mid-market rate is the midpoint between global buy and sell orders on wholesale currency markets. Retail banks buy lower and sell higher, keeping the difference as profit.`
-                }
-              },
-              {
-                '@type': 'Question',
-                name: `When is the best time to convert or send ${fromCurrency} to ${toCurrency}?`,
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: `Market liquidity is highest during the overlap of the London and New York trading sessions (13:00 to 17:00 UTC). Avoiding weekend transfers helps bypass widened retail broker spreads.`
+                  text: `CurrenFlow calculates conversions using real-time wholesale interbank exchange rates with zero retail markup.`
                 }
               }
             ]
@@ -285,7 +278,7 @@ export function App() {
         if (el) el.remove();
       };
     }
-  }, [fromCurrency, toCurrency, pageView]);
+  }, [fromCurrency, toCurrency, pageView, ratesData]);
 
   const loadRates = async () => {
     setIsLoading(true);
