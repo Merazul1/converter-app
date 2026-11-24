@@ -170,6 +170,12 @@ export function App() {
 
       if (isDefaultHome) {
         document.title = 'CurrenFlow: Live Currency Converter & Exchange Rates';
+      } else if (fromCurrency === 'USD' && toCurrency === 'PKR') {
+        document.title = `1 USD = ${rateStr || '278.50'} PKR: Live Dollar to Rupee Rate | CurrenFlow`;
+      } else if (fromCurrency === 'USD' && toCurrency === 'EUR') {
+        document.title = `1 USD = ${rateStr || '0.92'} EUR: Live Dollar to Euro Rate | CurrenFlow`;
+      } else if (fromCurrency === 'USD' && toCurrency === 'INR') {
+        document.title = `1 USD = ${rateStr || '84.40'} INR: Live Dollar to Rupee Rate | CurrenFlow`;
       } else {
         const ratePart = rateStr ? `1 ${fromCurrency} = ${rateStr} ${toCurrency}` : `${fromCurrency} to ${toCurrency}`;
         document.title = `${fromCurrency} to ${toCurrency}: ${ratePart} Live Rate | CurrenFlow`;

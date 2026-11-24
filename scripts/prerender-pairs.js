@@ -170,6 +170,16 @@ function getRateStr(pair, estRate) {
 }
 
 function getPairTitle(pair, rateStr) {
+  if (pair.from === 'USD' && pair.to === 'PKR') {
+    return `1 USD = ${rateStr} PKR: Live Dollar to Rupee Rate | CurrenFlow`;
+  }
+  if (pair.from === 'USD' && pair.to === 'EUR') {
+    return `1 USD = ${rateStr} EUR: Live Dollar to Euro Rate | CurrenFlow`;
+  }
+  if (pair.from === 'USD' && pair.to === 'INR') {
+    return `1 USD = ${rateStr} INR: Live Dollar to Rupee Rate | CurrenFlow`;
+  }
+
   let title = pair.to === 'BTC'
     ? `${pair.from} to ${pair.to} Live: Real-Time Bitcoin Price | CurrenFlow`
     : pair.from === 'BTC'
