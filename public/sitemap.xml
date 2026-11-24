@@ -236,20 +236,20 @@
 
   <!-- Legal & Static Pages -->
   <url>
-    <loc>https://www.currenflow.com/privacy-policy.html</loc>
-    <lastmod>2026-11-23</lastmod>
+    <loc>https://www.currenflow.com/privacy-policy</loc>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.currenflow.com/terms-of-service.html</loc>
-    <lastmod>2026-11-23</lastmod>
+    <loc>https://www.currenflow.com/terms-of-service</loc>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.currenflow.com/contact.html</loc>
-    <lastmod>2026-11-23</lastmod>
+    <loc>https://www.currenflow.com/contact</loc>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

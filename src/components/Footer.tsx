@@ -133,7 +133,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <a
-                  href="/privacy-policy.html"
+                  href="/privacy-policy"
                   onClick={(e) => {
                     e.preventDefault();
                     onOpenLegal('privacy');
@@ -145,7 +145,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <a
-                  href="/terms-of-service.html"
+                  href="/terms-of-service"
                   onClick={(e) => {
                     e.preventDefault();
                     onOpenLegal('terms');
@@ -157,7 +157,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <a
-                  href="/contact.html"
+                  href="/contact"
                   onClick={(e) => {
                     e.preventDefault();
                     onOpenLegal('contact');
@@ -202,7 +202,7 @@ export const Footer: React.FC<FooterProps> = ({
             </a>
             <span>•</span>
             <a
-              href="/privacy-policy.html"
+              href="/privacy-policy"
               onClick={(e) => {
                 e.preventDefault();
                 onOpenLegal('privacy');
@@ -213,7 +213,7 @@ export const Footer: React.FC<FooterProps> = ({
             </a>
             <span>•</span>
             <a
-              href="/terms-of-service.html"
+              href="/terms-of-service"
               onClick={(e) => {
                 e.preventDefault();
                 onOpenLegal('terms');
@@ -224,7 +224,7 @@ export const Footer: React.FC<FooterProps> = ({
             </a>
             <span>•</span>
             <a
-              href="/contact.html"
+              href="/contact"
               onClick={(e) => {
                 e.preventDefault();
                 onOpenLegal('contact');

@@ -15,9 +15,9 @@ function scanDir(dir) {
     } else if (entry.name === 'index.html') {
       totalPages++;
       const content = fs.readFileSync(full, 'utf8');
-      const title = (content.match(/<title>(.*?)<\/title>/) || [])[1] || '';
-      const desc = (content.match(/<meta name="description" content="(.*?)" \/>/) || [])[1] || '';
-      const canonical = (content.match(/<link rel="canonical" href="(.*?)" \/>/) || [])[1] || '';
+      const title = (content.match(/<title>(.*?)<\/title>/i) || [])[1] || '';
+      const desc = (content.match(/<meta\s+name=["']description["']\s+content=["'](.*?)["']\s*\/?>/i) || [])[1] || '';
+      const canonical = (content.match(/<link\s+rel=["']canonical["']\s+href=["'](.*?)["']\s*\/?>/i) || [])[1] || '';
 
       if (title.length > 60) {
         console.error(`[FAIL TITLE > 60] ${full}: ${title.length} chars -> "${title}"`);
@@ -29,6 +29,10 @@ function scanDir(dir) {
       }
       if (!canonical) {
         console.error(`[FAIL CANONICAL MISSING] ${full}`);
+        errors++;
+      }
+      if (canonical.endsWith('.html')) {
+        console.error(`[FAIL CANONICAL HAS .HTML] ${full} -> "${canonical}"`);
         errors++;
       }
     }

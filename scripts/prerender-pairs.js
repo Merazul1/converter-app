@@ -593,4 +593,24 @@ for (const guide of GUIDES) {
 }
 
 console.log('✓ Successfully pre-rendered all 5 guide articles!');
+
+// 5. Pre-render clean directory pages for /contact, /privacy-policy, and /terms-of-service
+const staticPages = [
+  { slug: 'contact', file: 'contact.html' },
+  { slug: 'privacy-policy', file: 'privacy-policy.html' },
+  { slug: 'terms-of-service', file: 'terms-of-service.html' }
+];
+
+for (const sp of staticPages) {
+  const srcFile = path.join(distDir, sp.file);
+  const targetDir = path.join(distDir, sp.slug);
+  if (fs.existsSync(srcFile)) {
+    let content = fs.readFileSync(srcFile, 'utf8');
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+    fs.writeFileSync(path.join(targetDir, 'index.html'), content, 'utf8');
+  }
+}
+console.log('✓ Successfully generated clean directory index pages for /contact, /privacy-policy, and /terms-of-service!');
 console.log('All static pages generated with perfect self-canonical tags, Rich Snippet schemas, and optimal SEO lengths.');

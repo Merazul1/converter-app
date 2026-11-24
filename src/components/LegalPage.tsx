@@ -21,7 +21,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onBackToHome }) => {
         metaDesc.setAttribute('content', 'Learn how CurrenFlow protects your privacy and personal data. Detailed policy on cookies, Google AdSense advertising, and user data rights.');
       }
       if (canonical) {
-        canonical.setAttribute('href', 'https://www.currenflow.com/privacy-policy.html');
+        canonical.setAttribute('href', 'https://www.currenflow.com/privacy-policy');
       }
     } else if (type === 'terms') {
       document.title = 'Terms of Service - CurrenFlow';
@@ -29,7 +29,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onBackToHome }) => {
         metaDesc.setAttribute('content', 'Review CurrenFlow terms of service, conditions of use, and exchange rate information disclaimers for using our free live currency converter.');
       }
       if (canonical) {
-        canonical.setAttribute('href', 'https://www.currenflow.com/terms-of-service.html');
+        canonical.setAttribute('href', 'https://www.currenflow.com/terms-of-service');
       }
     } else {
       document.title = 'Contact & Support - CurrenFlow';
@@ -37,7 +37,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onBackToHome }) => {
         metaDesc.setAttribute('content', 'Contact CurrenFlow support for inquiries, currency rate questions, and API partnerships. Fast and dedicated support for our currency calculator.');
       }
       if (canonical) {
-        canonical.setAttribute('href', 'https://www.currenflow.com/contact.html');
+        canonical.setAttribute('href', 'https://www.currenflow.com/contact');
       }
     }
   }, [type]);
