@@ -75,6 +75,14 @@
       "description": "Live mid-market currency exchange rates and conversion calculator.",
       "publisher": {
         "@id": "https://www.currenflow.com/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://www.currenflow.com/?from=USD&to={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
       }
     }
     </script>

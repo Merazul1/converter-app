@@ -179,6 +179,18 @@ function getPairTitle(pair, rateStr) {
   if (pair.from === 'USD' && pair.to === 'INR') {
     return `1 USD = ${rateStr} INR: Live Dollar to Rupee Rate | CurrenFlow`;
   }
+  if (pair.from === 'USD' && pair.to === 'BDT') {
+    return `1 USD = ${rateStr} BDT: Live Dollar to Taka Rate | CurrenFlow`;
+  }
+  if (pair.from === 'USD' && pair.to === 'JPY') {
+    return `1 USD = ${rateStr} JPY: Live Dollar to Yen Rate | CurrenFlow`;
+  }
+  if (pair.from === 'USD' && pair.to === 'MXN') {
+    return `1 USD = ${rateStr} MXN: Dólar a Peso Mexicano | CurrenFlow`;
+  }
+  if (pair.from === 'CAD' && pair.to === 'USD') {
+    return `1 CAD = ${rateStr} USD: Live Canadian Dollar Rate | CurrenFlow`;
+  }
 
   let title = pair.to === 'BTC'
     ? `${pair.from} to ${pair.to} Live: Real-Time Bitcoin Price | CurrenFlow`
@@ -269,6 +281,12 @@ for (const pair of POPULAR_PAIRS) {
   } else if (slug === 'usd-to-inr') {
     specificFaqQuestion = `How much is 1,000 USD in Indian Rupees?`;
     specificFaqAnswer = `At today's live mid-market rate of 1 USD = ${rateStr} INR, 1,000 USD is approximately ${(1000 * estRate).toLocaleString('en-US', { maximumFractionDigits: 0 })} INR.`;
+  } else if (slug === 'usd-to-bdt') {
+    specificFaqQuestion = `How much is 100 USD in Bangladeshi Taka (BDT)?`;
+    specificFaqAnswer = `At today's live mid-market rate of 1 USD = ${rateStr} BDT, 100 USD is approximately ${(100 * estRate).toLocaleString('en-US', { maximumFractionDigits: 0 })} BDT.`;
+  } else if (slug === 'usd-to-mxn') {
+    specificFaqQuestion = `¿Cuánto es 1 dólar a pesos mexicanos hoy?`;
+    specificFaqAnswer = `1 USD equivale a ${rateStr} MXN (pesos mexicanos) al tipo de cambio interbancario en tiempo real en CurrenFlow con cero comisiones ocultas.`;
   } else if (isCryptoPair) {
     specificFaqQuestion = `Does the ${pair.from}/${pair.to} price vary across exchanges?`;
     specificFaqAnswer = `Yes — because cryptocurrency trading is fragmented across decentralized order books, the quoted rate can differ slightly by venue. CurrenFlow provides a real-time consolidated mid-market benchmark price.`;

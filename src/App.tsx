@@ -176,6 +176,14 @@ export function App() {
         document.title = `1 USD = ${rateStr || '0.92'} EUR: Live Dollar to Euro Rate | CurrenFlow`;
       } else if (fromCurrency === 'USD' && toCurrency === 'INR') {
         document.title = `1 USD = ${rateStr || '84.40'} INR: Live Dollar to Rupee Rate | CurrenFlow`;
+      } else if (fromCurrency === 'USD' && toCurrency === 'BDT') {
+        document.title = `1 USD = ${rateStr || '119.80'} BDT: Live Dollar to Taka Rate | CurrenFlow`;
+      } else if (fromCurrency === 'USD' && toCurrency === 'JPY') {
+        document.title = `1 USD = ${rateStr || '155.40'} JPY: Live Dollar to Yen Rate | CurrenFlow`;
+      } else if (fromCurrency === 'USD' && toCurrency === 'MXN') {
+        document.title = `1 USD = ${rateStr || '20.30'} MXN: Dólar a Peso Mexicano | CurrenFlow`;
+      } else if (fromCurrency === 'CAD' && toCurrency === 'USD') {
+        document.title = `1 CAD = ${rateStr || '0.71'} USD: Live Canadian Dollar Rate | CurrenFlow`;
       } else {
         const ratePart = rateStr ? `1 ${fromCurrency} = ${rateStr} ${toCurrency}` : `${fromCurrency} to ${toCurrency}`;
         document.title = `${fromCurrency} to ${toCurrency}: ${ratePart} Live Rate | CurrenFlow`;
