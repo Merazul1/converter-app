@@ -7,7 +7,7 @@ import { PairInsightSection } from './components/PairInsightSection';
 import { CurrencyMatrix } from './components/CurrencyMatrix';
 import { SeoContent } from './components/SeoContent';
 import { FaqSection } from './components/FaqSection';
-import { AdPlaceholder } from './components/AdPlaceholder';
+import { AdUnit } from './components/AdUnit';
 import { EmbedModal } from './components/EmbedModal';
 import { LegalModal, type LegalTab } from './components/LegalModal';
 import { LegalPage } from './components/LegalPage';
@@ -438,9 +438,6 @@ export function App() {
           </div>
         </div>
 
-        {/* Top Monetization / Leaderboard Ad Slot */}
-        <AdPlaceholder format="leaderboard" />
-
         {/* Core Converter Card */}
         <div>
           <ConverterCard
@@ -489,7 +486,7 @@ export function App() {
         </div>
 
         {/* Mid-Page In-Content Ad Slot */}
-        <AdPlaceholder format="leaderboard" />
+        <AdUnit slot="4589217032" format="horizontal" />
 
         {/* SEO-Rich Content Section */}
         <div className="mb-12">
@@ -500,6 +497,9 @@ export function App() {
         <div className="mb-12">
           <FaqSection />
         </div>
+
+        {/* Post-FAQ Ad Unit */}
+        <AdUnit slot="4589217033" format="auto" />
 
         {/* Trust Banner */}
         <div className="p-6 rounded-3xl bg-blue-50 border border-blue-100 text-center flex flex-col sm:flex-row items-center justify-center gap-3">

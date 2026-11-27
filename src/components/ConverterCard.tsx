@@ -248,13 +248,18 @@ export const ConverterCard: React.FC<ConverterCardProps> = ({
           </div>
         </div>
 
-        {/* Timestamp Footer */}
-        {ratesData?.lastUpdated && (
-          <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800/60 text-[11px] text-slate-500">
-            <Clock size={12} />
-            <span>Updated: {ratesData.lastUpdated}</span>
+        {/* Timestamp & Market Data Attribution */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-4 pt-3 border-t border-slate-800/60 text-[11px] text-slate-500">
+          {ratesData?.lastUpdated && (
+            <div className="flex items-center gap-1.5">
+              <Clock size={12} />
+              <span>Updated: {ratesData.lastUpdated}</span>
+            </div>
+          )}
+          <div className="text-slate-500">
+            Mid-market rates via open.er-api.com &bull; Indicative only
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -429,6 +429,10 @@ for (const pair of POPULAR_PAIRS) {
               <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">${fromName} is regulated by ${fromMeta.issuer || 'its central monetary authority'}, and ${toName} is regulated by ${toMeta.issuer || 'its central monetary authority'}.</p>
             </div>
           </div>
+
+          <div style="margin-top: 24px; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 12px; color: #64748b; line-height: 1.5;">
+            <strong>Data Source &amp; Legal Disclaimer:</strong> Exchange rates are indicative and sourced from interbank market feeds and open.er-api.com. CurrenFlow provides real-time mid-market information for informational and educational purposes only. This information does not constitute financial, investment, or remittance advice. Always confirm quotes with your licensed financial provider before executing transactions.
+          </div>
         </section>
       </main>`;
 

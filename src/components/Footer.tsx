@@ -171,6 +171,13 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
+        {/* Bottom Disclaimer Banner */}
+        <div className="pt-6 pb-2 text-[11px] text-slate-500 border-t border-slate-800/80 leading-relaxed">
+          <p>
+            <strong>Market Data &amp; Regulatory Notice:</strong> CurrenFlow provides real-time mid-market foreign exchange rates sourced from open.er-api.com and central interbank feeds for personal informational and educational purposes. Rates shown are indicative only and do not constitute financial, investment, legal, or remittance advice. Always verify final transaction rates with your bank or licensed money transfer operator before transferring funds.
+          </p>
+        </div>
+
         {/* Bottom copyright & legal links */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} CurrenFlow (currenflow.com). All rights reserved.</p>
