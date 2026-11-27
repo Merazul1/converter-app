@@ -42,3 +42,12 @@
 .transition-all-custom {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Collapse empty or unfilled AdSense units cleanly */
+ins.adsbygoogle[data-ad-status="unfilled"],
+ins.adsbygoogle:empty,
+aside:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+  display: none !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}

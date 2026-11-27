@@ -19,7 +19,7 @@ import type { RatesData } from './types/currency';
 import { fetchExchangeRates, convertCurrency } from './services/currencyService';
 import { CURRENCIES, POPULAR_PAIRS } from './data/currencies';
 import { GUIDES } from './data/guidesData';
-import { TrendingUp, ShieldCheck } from 'lucide-react';
+import { TrendingUp, ShieldCheck, Sparkles, ArrowUp, BookOpen, Zap, CheckCircle2 } from 'lucide-react';
 
 type PageViewType = 'home' | 'privacy' | 'terms' | 'contact' | 'about' | 'guides' | 'guide-detail';
 
@@ -405,7 +405,7 @@ export function App() {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-8 pb-16">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-8 pb-4">
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-8">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100/70 text-blue-700 border border-blue-200 mb-4">
@@ -494,20 +494,108 @@ export function App() {
         </div>
 
         {/* FAQ Accordion */}
-        <div className="mb-12">
+        <div className="mb-10">
           <FaqSection />
         </div>
 
-        {/* Post-FAQ Ad Unit */}
-        <AdUnit slot="4589217033" format="auto" />
+        {/* Pre-Footer Conversion & Trust Hub */}
+        <section className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-xl relative overflow-hidden my-8">
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Trust Banner */}
-        <div className="p-6 rounded-3xl bg-blue-50 border border-blue-100 text-center flex flex-col sm:flex-row items-center justify-center gap-3">
-          <ShieldCheck size={24} className="text-blue-600 shrink-0" />
-          <p className="text-xs sm:text-sm text-blue-900 font-medium">
-            <strong>Security &amp; Privacy Guaranteed:</strong> CurrenFlow never asks for your personal information, credit cards, or banking logins. All conversions happen securely in your browser.
-          </p>
-        </div>
+          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">
+              <Sparkles size={14} className="text-blue-400" /> Fast &amp; 100% Free Forever
+            </div>
+
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Ready to Convert Another Currency?
+            </h3>
+
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+              Calculate live mid-market exchange rates across 160+ world currencies with zero banking markups and real-time interbank spreads.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/30 transition-all cursor-pointer hover:scale-[1.02]"
+              >
+                <ArrowUp size={16} /> Convert Currency Now
+              </button>
+              <a
+                href="/guides"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('/guides', 'guides');
+                }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 hover:text-white font-semibold text-sm border border-slate-700 transition-all cursor-pointer"
+              >
+                <BookOpen size={16} /> Explore Forex Guides
+              </a>
+            </div>
+
+            {/* Quick Corridor Jump Pills */}
+            <div className="pt-2">
+              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">
+                Popular Currency Corridors:
+              </span>
+              <div className="flex flex-wrap items-center justify-center gap-1.5">
+                {[
+                  { from: 'USD', to: 'EUR' },
+                  { from: 'USD', to: 'PKR' },
+                  { from: 'USD', to: 'INR' },
+                  { from: 'USD', to: 'BDT' },
+                  { from: 'USD', to: 'CAD' },
+                  { from: 'USD', to: 'JPY' },
+                  { from: 'EUR', to: 'GBP' },
+                  { from: 'USD', to: 'MXN' },
+                ].map((p) => (
+                  <button
+                    key={`${p.from}-${p.to}`}
+                    type="button"
+                    onClick={() => {
+                      updatePair(p.from, p.to);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="text-xs px-3 py-1 rounded-lg bg-slate-800/90 hover:bg-blue-600 text-slate-300 hover:text-white border border-slate-700/80 transition-colors cursor-pointer"
+                  >
+                    {p.from}/{p.to}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 3 Core Trust Assurances */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-slate-800/80 text-left text-xs">
+              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+                <ShieldCheck size={18} className="text-emerald-400 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="text-slate-100 block font-semibold">100% Private</strong>
+                  <span className="text-slate-400 text-[11px]">No logins or cookies. Conversions stay in browser.</span>
+                </div>
+              </div>
+              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+                <Zap size={18} className="text-amber-400 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="text-slate-100 block font-semibold">Live Interbank Feeds</strong>
+                  <span className="text-slate-400 text-[11px]">Real mid-market baseline updated automatically.</span>
+                </div>
+              </div>
+              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+                <CheckCircle2 size={18} className="text-blue-400 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="text-slate-100 block font-semibold">0% Retail Markups</strong>
+                  <span className="text-slate-400 text-[11px]">Bypass 3%–5% commercial bank hidden charges.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Embed Modal */}

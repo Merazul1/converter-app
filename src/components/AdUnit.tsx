@@ -32,7 +32,7 @@ export const AdUnit: React.FC<AdUnitProps> = ({
   return (
     <aside
       aria-label="Advertisement"
-      className={`w-full max-w-4xl mx-auto my-6 min-h-[90px] flex items-center justify-center overflow-hidden ${className}`}
+      className={`w-full max-w-4xl mx-auto my-4 flex items-center justify-center overflow-hidden empty:hidden ${className}`}
     >
       <ins
         className="adsbygoogle"

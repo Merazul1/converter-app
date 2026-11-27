@@ -20,7 +20,7 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectGuide,
 }) => {
   return (
-    <footer className="bg-slate-900 text-slate-400 pt-16 pb-12 mt-20 border-t border-slate-800">
+    <footer className="bg-slate-900 text-slate-400 pt-16 pb-12 mt-4 sm:mt-6 border-t border-slate-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-slate-800">
           {/* Brand Info (col-span-3) */}
